@@ -1,0 +1,64 @@
+{
+  "apiVersion": "1",
+  "systemTime": "2018-08-07T12:56:35.857977428Z",
+  "data": {
+    "data": [
+      {
+        "code": "01",
+        "name": "Álvaro González",
+        "type": "default"
+      },
+      {
+        "code": "02",
+        "name": "María Ureña",
+        "type": "default",
+        "urlImage": "/demo/images/02.png"
+      },
+      {
+        "code": "03",
+        "name": "Ruth Vilar",
+        "type": "default",
+        "urlImage": "/demo/images/03.png"
+      },
+      {
+        "code": "04",
+        "name": "Sergio Estévez",
+        "type": "default",
+        "urlImage": "/demo/images/04.png"
+      },
+      {
+        "code": "05",
+        "name": "Sara Lastra",
+        "type": "default",
+        "urlImage": "/demo/images/05.png"
+      },
+      {
+        "code": "06",
+        "name": "Ignacio Redenta",
+        "type": "default",
+        "urlImage": "/demo/images/06.png"
+      },
+      {
+        "code": "07",
+        "name": "Esther Gómez",
+        "type": "default",
+        "urlImage": "/demo/images/07.png"
+      },
+      {
+        "code": "08",
+        "name": "Hugo Díaz",
+        "type": "default",
+        "urlImage": "/demo/images/08.png"
+      }
+    ],
+    "sysData": {
+      "created": "2018-07-13T08:24:38.808Z",
+      "createdBy": "neo",
+      "edited": "2018-07-25T11:14:24.134Z",
+      "editedBy": "neo",
+      "editing": "2018-07-25T11:14:24.134Z",
+      "editingBy": "neo"
+    }
+  },
+  "error": null
+}

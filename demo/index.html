@@ -1,0 +1,105 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2017 Neo
+-->
+<html lang="es">
+<head>
+  <title>nc-items-grid demo</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <link rel="import" href="../../polymer/polymer-element.html">
+  <link rel="import" href="../../iron-ajax/iron-ajax.html">
+  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+
+  <link rel="import" href="../nc-items-grid.html">
+  <style>
+    body{
+      margin: 0px;
+      padding: 0px;
+      font-family: 'Roboto', 'Noto', sans-serif;
+    }
+  </style>
+</head>
+<body unresolved>
+<dom-module id="nc-items-grid-demo">
+  <template>
+    <style>
+     :host {
+        display: block;
+      }
+
+      div{
+        margin-bottom: 20px;
+      }
+
+      .containerProducts{
+        height: 76px;
+        width: 456px;
+        background-color: #EF9A9A;
+      }
+
+      .containerUsers{
+        height: 274px;
+        width: 310px;
+        background-color: #bee6fd;
+      }
+
+
+    </style>
+    <iron-ajax id="getProductsList"
+            auto
+            url="data/products"
+            method="get"
+            handle-as="json"
+            last-response="{{productsList}}">
+    </iron-ajax>
+
+    <iron-ajax id="getUsersList"
+            auto
+            url="data/users"
+            method="get"
+            handle-as="json"
+            last-response="{{usersList}}">
+    </iron-ajax>
+      
+    <div class="containerProducts">
+      <nc-items-grid
+                  data='{{productsList.data.data}}'
+                  language="es"
+                  _breadcrumb
+                  is-paginated
+                  auto-flow
+                  dimension="70">
+      </nc-items-grid>
+    </div>
+
+    <div class="containerUsers">
+      <nc-items-grid
+                  data='{{usersList.data.data}}'
+                  language="es"
+                  _breadcrumb
+                  is-paginated
+                  auto-flow
+                  dimension="130">
+      </nc-items-grid>
+    </div>
+
+  </template>
+  <script>
+    class NcItemsGridDemo extends Polymer.Element {
+      static get is() {
+        return 'nc-items-grid-demo';
+      }
+    }
+    window.customElements.define(NcItemsGridDemo.is, NcItemsGridDemo);
+  </script>
+</dom-module>
+<nc-items-grid-demo></nc-items-grid-demo>
+</body>
+</html>

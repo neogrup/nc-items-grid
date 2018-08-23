@@ -1,0 +1,443 @@
+<!--
+@license
+Copyright (c) 2017 Neo
+-->
+
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../app-localize-behavior/app-localize-behavior.html">
+<link rel="import" href="../iron-list/iron-list.html">
+
+<link rel="import" href="nc-items-grid-item.html">
+
+<dom-module id="nc-items-grid">
+  <template>
+    <style>
+      :host {
+        display: block;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      ul.breadcrumb {
+        padding: 0 10px;
+        margin: 4px;
+        height: 20px;
+        line-height: 20px;
+        list-style: none;
+        font-size: 17px;
+        border-bottom: 1px solid black;
+      }
+
+      /* Display list items side by side */
+      ul.breadcrumb li {
+        display: inline;
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+        -khtml-user-select: none; /* Konqueror HTML */
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+        user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+      }
+
+      ul.breadcrumb li:last-child {
+        float: right;
+      }
+
+      /* Add a slash symbol (/) before/behind each list item */
+      ul.breadcrumb li+li:before {
+        padding: 2px;
+        content: "/\00a0";
+      }
+
+      /* Add a color on mouse-over */
+      ul.breadcrumb li span:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      iron-list {
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+
+    <template is="dom-if" if="[[breadcrumb]]">
+      <ul class="breadcrumb">
+        <template is="dom-repeat" items="[[breadcrumbList]]">
+          <li ><span on-tap="_selectFolder">[[item.name]]</span></li>
+        </template>
+        <li>[[currentLevelPageBreadcrumb]] / [[currentLevelTotalPages]]</li>
+      </ul>
+    </template>
+
+    <iron-list grid>
+      <template>
+        <nc-items-grid-item
+                item="[[item]]"
+                dimension="[[dimension]]"
+                on-parent-folder-selected="_parentFolderSelected"
+                on-next-button-pressed="_nextButtonPressed"
+                on-previous-button-pressed="_previousButtonPressed"
+                on-folder-selected="_folderSelected">
+        </nc-items-grid-item>
+      </template>
+    </iron-list>
+
+  </template>
+
+  <script>
+    class NcItemsGrid extends Polymer.mixinBehaviors([Polymer.AppLocalizeBehavior], Polymer.Element) {
+      static get is() {
+        return 'nc-items-grid';
+      }
+      
+      static get properties() {
+        return {
+          data: {
+            type: Object,
+            value: [],
+            observer: '_dataChanged'
+          },
+          language: String,
+          dimension: {
+            type: Number,
+            value: 100,
+            observer: '_dimensionChanged',
+            reflectToAttribute: true
+          },
+          levels: {
+            type: Array,
+            value: []
+          },
+          level: {
+            type: Array,
+            value: [],
+            observer: '_setCurrentLevelTotalPages'
+          },
+          currentLevel: {
+            type: Number,
+            value: 0
+          },
+          levelIndexFrom: {
+            type: Number,
+            value: 0
+          },
+          levelIndexTo: {
+            type: Number,
+            value: 0
+          },
+          currentLevelPage: {
+            type: Number,
+            value: 0
+          },
+          currentLevelPageBreadcrumb: {
+            type: Number,
+            computed: '_computeCurrentLevelPageBreadcrumb(currentLevelPage)'
+          },
+          currentLevelTotalPages: {
+            type: Number,
+            value: 0
+          },
+          limitItemsPerLevel: {
+            type: Number,
+            value: 0
+          },
+          parentFolder: {
+            type: Object,
+            value: {
+              backgroundColor: "",
+              code: "",
+              name: "..",
+              type: "parentFolder",
+              urlImage: ""
+            }
+          },
+          nextButton: {
+            type: Object,
+            value: {
+              backgroundColor: "",
+              code: "",
+              name: "Siguiente",
+              type: "nextButton",
+              urlImage: ""
+            }
+          },
+          previousButton: {
+            type: Object,
+            value: {
+              backgroundColor: "",
+              code: "",
+              name: "Anterior",
+              type: "previousButton",
+              urlImage: ""
+            }
+          },
+          breadcrumb: {
+            type: Boolean,
+            value: false,
+  //          observer: '_changeBreadcrumbVisibility'
+          },
+          autoFlow: {
+            type: Boolean,
+            value: false
+          },
+          breadcrumbList: {
+            type: Array,
+            value: [],
+            notify: true
+          },
+          isPaginated: {
+            type: Boolean,
+            value: false
+          }
+        }
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        this.useKeyIfMissing = true;
+        this.loadResources(this.resolveUrl('static/translations.json'));
+      }
+
+      _dimensionChanged(){
+        this.gridResize();
+      }
+
+      gridResize(){
+        if (this.isPaginated) {
+          let h = this.offsetHeight;
+          let cols = Math.trunc(this.offsetWidth / (this.dimension + 6)); /* 6: 2px left margin +  2px right margin + 1px left border + 1px right border */
+
+          if (this.breadcrumb){
+            h = h - 28;
+          }
+          
+          let rows = Math.trunc(h / (this.dimension + 6)); /* 6: 2px top margin +  2px bottom margin + 1px top border + 1px bottom border */
+          this.limitItemsPerLevel = cols*rows;
+
+        } else {
+          this.limitItemsPerLevel = 0;
+        }
+      }
+
+      _computeCurrentLevelPageBreadcrumb(currentLevelPage){
+        return currentLevelPage + 1
+      }
+
+      _setCurrentLevelTotalPages(){
+        if (this.levels) {
+          if (this.levels[this.currentLevel]) {
+            if (this.limitItemsPerLevel != 0)
+
+              if (this.levels[this.currentLevel].length % (this.limitItemsPerLevel - 2) > 1) {
+                this.currentLevelTotalPages = Math.trunc(this.levels[this.currentLevel].length / (this.limitItemsPerLevel - 2)) + 1;
+              } else {
+                this.currentLevelTotalPages = Math.trunc(this.levels[this.currentLevel].length / (this.limitItemsPerLevel - 2));
+              }
+              if (this.currentLevelTotalPages == 0 )
+                this.currentLevelTotalPages = 1;
+          } else {
+            this.currentLevelTotalPages = 1;
+          }
+        }
+      }
+
+      _dataChanged(){       
+        this.currentLevel = 0;
+        this.currentLevelPage = 0;
+        this.levelIndexFrom = 0;
+        this.level = [];
+        this.levels = [];
+
+        let showNextButton = false;
+        let showParentFolder = false;
+        let showPreviousButton = false;
+
+        if (this.data) {
+          if (this.data.length > 0){
+            this.levels.push(this.data);
+            showNextButton = this.levels[this.currentLevel].length > this.limitItemsPerLevel - 1;
+            if (showNextButton) {
+              this.levelIndexTo = this.levelIndexTo + this.limitItemsPerLevel - 1 - 1;
+            } else{
+              this.levelIndexTo = this.levels[this.currentLevel].length - 1;
+            }
+            this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo );
+          }
+        }
+
+        if (this.breadcrumbList){
+          this.push ('breadcrumbList', {
+            level: 0,
+            name: this.localize('ITEMS_GRID_BREADCRUMB_ALL')
+          });
+        }
+
+        if (this.autoFlow) {
+          if (this.currentLevel==0) {
+            if (this.level.length == 1) {
+              if (this.level[0].type == "folder") {
+                this._folderSelected({detail:this.level[0]});
+              }
+            }
+          }
+        }
+      }
+
+      _setPage(_showPrevious, _showParent, _showNext, _from, _to) {
+        if (this.limitItemsPerLevel != 0 ) {
+          this.level = this.levels[this.currentLevel].slice(this.levelIndexFrom, this.levelIndexTo + 1);
+          if (_showPrevious) {
+            this.level.unshift(this.previousButton);
+          }
+          if (_showNext) {
+            this.level.push(this.nextButton);
+          }
+        } else {
+          this.level =  this.levels[this.currentLevel];
+        }
+
+        if (_showParent) {
+          if (this.level[0].type != 'parentFolder'){
+            this.level.unshift(this.parentFolder);
+          }
+        }
+
+        this.shadowRoot.querySelector('iron-list').items = this.level;
+      }
+
+      _parentFolderSelected(){
+        this.currentLevel--;
+        this.currentLevelPage = 0;
+        this.levelIndexFrom = 0;
+        // Remove the last element of an array:
+        this.levels.pop();
+        let showNextButton = false;
+        let showParentFolder = false;
+        let showPreviousButton = false;
+
+        
+
+        if (this.currentLevel > 0){
+          showParentFolder = true;
+        }
+        showNextButton = this.levels[this.currentLevel].length > this.limitItemsPerLevel - 1;
+
+        if (showNextButton){
+          this.levelIndexTo = this.levelIndexFrom + this.limitItemsPerLevel - 1 - 1;
+          if (this.currentLevel > 0) { 
+            this.levelIndexTo = this.levelIndexTo - 1;
+          }
+        } else {
+          this.levelIndexTo = this.levels[this.currentLevel].length - 1;
+        }
+
+        this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo );
+
+        this.pop('breadcrumbList');
+
+        if (this.autoFlow) {
+          if (this.level.length <= 2) { //parent folder & and the folder itself
+            if (this.level[0].type == "parentFolder") {
+              if (this.level[1].type == "folder") {
+                this._parentFolderSelected();
+              }
+            }
+          }
+        }
+      }
+
+      _nextButtonPressed(){
+        this.currentLevelPage++;
+        this.levelIndexFrom = this.levelIndexTo + 1;
+        let showNextButton = false;
+        let showParentFolder = false;
+        let showPreviousButton = true;
+
+        if ( this.levels[this.currentLevel].length - this.levelIndexFrom <= this.limitItemsPerLevel - 1){ //-1 del previous //ulyima página
+          this.levelIndexTo = this.levels[this.currentLevel].length - 1;
+        } else { //necesario next
+          this.levelIndexTo = this.levelIndexFrom + this.limitItemsPerLevel - 1 - 1 - 1; //-1 previous -1 next -1 0based
+          showNextButton = true;
+        }
+
+        this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo );
+      }
+
+      _previousButtonPressed(){
+        this.currentLevelPage--;
+        this.levelIndexTo = this.levelIndexFrom - 1;
+        let showNextButton = true;
+        let showParentFolder = false;
+        let showPreviousButton = false;
+
+        if (this.currentLevelPage>0){
+          showPreviousButton = true;
+        } else {
+          if (this.currentLevel>0) {
+            showParentFolder = true;
+          }
+        }
+
+        if ( showParentFolder || showPreviousButton){
+          this.levelIndexFrom = this.levelIndexTo - (this.limitItemsPerLevel - 2) + 1; //-2 per parent/previous i next, +1 0 based
+          if (this.levelIndexFrom<0) this.levelIndexFrom = 0;
+        } else { //necesario next
+          this.levelIndexFrom = 0;
+        }
+
+        this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo )
+      }
+
+      _selectFolder (item) {
+        let itemSelected = item.model.__data.item;
+        for (let i=this.currentLevel; i>itemSelected.level; i--) {
+          this._parentFolderSelected();
+        }
+      }
+
+      _folderSelected(item) {
+        this.currentLevel++;
+        this.currentLevelPage = 0;
+
+        this.levelIndexFrom = 0;
+        this.levels.push(item.detail.content);
+
+        let showParentFolder = true;
+        let showPreviousButton = false;
+        let showNextButton = this.levels[this.currentLevel].length > this.limitItemsPerLevel - 1;
+
+        if (showNextButton) {
+          this.levelIndexTo = this.limitItemsPerLevel - 1 - 1 - 1; //-1 de 0 based -1 parent folder -1 next
+        } else {
+          this.levelIndexTo = this.levels[this.currentLevel].length - 1;
+        }
+
+        this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo);
+
+        if (this.breadcrumbList) {
+          this.push('breadcrumbList', {
+            level: this.currentLevel,
+            name: item.detail.name
+          });
+        }
+
+        if (this.autoFlow) {
+          if (this.level.length <= 2) { //parent folder & and the folder itself
+            if (this.level[1].type == "folder") { // 1 'cause 0 is parent
+              this._folderSelected({detail:this.level[1]});
+            }
+          }
+        }
+      }
+
+
+    }
+    window.customElements.define(NcItemsGrid.is, NcItemsGrid);
+
+
+  </script>
+</dom-module>
