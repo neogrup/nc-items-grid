@@ -54,7 +54,7 @@ Copyright (c) 2017 Neo
     </style>
     <iron-ajax id="getProductsList"
             auto
-            url="data/products"
+            url="data/products_3"
             method="get"
             handle-as="json"
             last-response="{{productsList}}">
@@ -75,11 +75,12 @@ Copyright (c) 2017 Neo
                   _breadcrumb
                   is-paginated
                   auto-flow
-                  dimension="70">
+                  dimension="70"
+                  show-price="{{showPrice}}">
       </nc-items-grid>
     </div>
 
-    <div class="containerUsers">
+    <!-- <div class="containerUsers">
       <nc-items-grid
                   data='{{usersList.data.data}}'
                   language="es"
@@ -88,13 +89,21 @@ Copyright (c) 2017 Neo
                   auto-flow
                   dimension="130">
       </nc-items-grid>
-    </div>
+    </div> -->
 
   </template>
   <script>
     class NcItemsGridDemo extends Polymer.Element {
       static get is() {
         return 'nc-items-grid-demo';
+      }
+      static get properties() {
+        return {
+          showPrice: {
+            type: Boolean,
+            value: true
+          }
+        }
       }
     }
     window.customElements.define(NcItemsGridDemo.is, NcItemsGridDemo);

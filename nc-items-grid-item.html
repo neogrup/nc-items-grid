@@ -111,6 +111,15 @@ Copyright (c) 2017 Neo
         background-image: var(--item-content-background-image);
         background-color: var(--item-content-background-color);
       }
+      
+      .productPrice{
+        float: right;
+        width: fit-content;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.5) 100%, rgba(0,0,0,0.5) 100%);
+        color: white;
+        padding: 0 2px;
+        font-size: 0.8em;
+      } 
 
       .default{
         background-image: var(--item-content-background-image);
@@ -150,6 +159,9 @@ Copyright (c) 2017 Neo
 
       <template is="dom-if" if="[[_checkType('product', item.type)]]">
         <div class="itemContent product" on-tap="_selectItem">
+          <div class="productPrice" hidden$=[[!showPrice]]>
+            [[item.price]]
+          </div>
           <paper-ripple></paper-ripple>
           <div class$="{{itemContentNameClassName}}">[[item.name]]</div>
         </div>
@@ -179,6 +191,11 @@ Copyright (c) 2017 Neo
             value: 100,
             reflectToAttribute: true,
             observer: '_dimensionChanged'
+          },
+          showPrice: {
+            type: Boolean,
+            value: true,
+            notify: true
           },
           item: {
             type: Object,
@@ -268,6 +285,8 @@ Copyright (c) 2017 Neo
       }
 
       _checkType(type, itemType){
+        itemType = (itemType) ? (itemType) : 'product';
+
         return (type==itemType);
       }
     }

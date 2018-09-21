@@ -110,6 +110,7 @@ Copyright (c) 2017 Neo
         <nc-items-grid-item
                 item="[[item]]"
                 dimension="[[dimension]]"
+                show-price="[[showPrice]]"
                 on-parent-folder-selected="_parentFolderSelected"
                 on-next-button-pressed="_nextButtonPressed"
                 on-previous-button-pressed="_previousButtonPressed"
@@ -144,6 +145,7 @@ Copyright (c) 2017 Neo
             observer: '_dimensionChanged',
             reflectToAttribute: true
           },
+          showPrice: Boolean,
           levels: {
             type: Array,
             value: []
