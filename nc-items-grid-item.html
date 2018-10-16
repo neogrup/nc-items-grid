@@ -5,6 +5,7 @@ Copyright (c) 2017 Neo
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/elements/dom-if.html">
+<link rel="import" href="../polymer/lib/mixins/mutable-data.html">
 <link rel="import" href="../app-localize-behavior/app-localize-behavior.html">
 <link rel="import" href="../iron-list/iron-list.html">
 <link rel="import" href="../paper-ripple/paper-ripple.html">
@@ -55,6 +56,7 @@ Copyright (c) 2017 Neo
       }
 
       .itemContentName {
+        white-space:pre-wrap;
         min-height: 20px;
         max-height: 40px;
         line-height: 20px;
@@ -71,6 +73,7 @@ Copyright (c) 2017 Neo
       }
 
       .itemContentNameCenter {
+        white-space:pre-wrap;
         min-height: 20px;
         max-height: 60px;
         line-height: 20px;
@@ -107,10 +110,6 @@ Copyright (c) 2017 Neo
         border-color: transparent;
       }
 
-      .product{
-        background-image: var(--item-content-background-image);
-        background-color: var(--item-content-background-color);
-      }
       
       .productPrice{
         float: right;
@@ -126,60 +125,56 @@ Copyright (c) 2017 Neo
         background-color: var(--item-content-background-color);
       }
 
+      .required{
+        color :red;
+      }
+
      
     </style>
 
     <div class="itemContainer">
-      <template is="dom-if" if="[[_checkType('parentFolder', item.type)]]">
+      <template is="dom-if" if="[[_checkType('parentFolder', itemData.type)]]">
         <div class="itemContent parentFolder" on-tap="_selectItem">
           <paper-ripple></paper-ripple>
-          <div class$="{{itemContentNameClassName}}">[[item.name]]</div>
+          <div class$="{{itemContentNameClassName}}">[[itemData.name]]</div>
         </div>
       </template>
 
-      <template is="dom-if" if="[[_checkType('nextButton', item.type)]]">
+      <template is="dom-if" if="[[_checkType('nextButton', itemData.type)]]">
         <div class="itemContent nextButton" on-tap="_selectItem">
           <paper-fab icon="chevron-right"></paper-fab>
         </div>
       </template>
 
-      <template is="dom-if" if="[[_checkType('previousButton', item.type)]]">
+      <template is="dom-if" if="[[_checkType('previousButton', itemData.type)]]">
         <div class="itemContent previousButton" on-tap="_selectItem">
           <paper-fab icon="chevron-left"></paper-fab>
         </div>
       </template>
 
 
-      <template is="dom-if" if="[[_checkType('folder', item.type)]]">
+      <template is="dom-if" if="[[_checkType('folder', itemData.type)]]">
         <div class="itemContent folder" on-tap="_selectItem">
           <paper-ripple></paper-ripple>
-          <div class$="{{itemContentNameClassName}}">[[item.name]]</div>
+          <div class$="{{itemContentNameClassName}}">[[itemData.name]]</div>
         </div>
       </template>
 
-      <template is="dom-if" if="[[_checkType('product', item.type)]]">
-        <div class="itemContent product" on-tap="_selectItem">
-          <div class="productPrice" hidden$=[[!showPrice]]>
-            [[item.price]]
+      <template is="dom-if" if="[[_checkType('default', itemData.type)]]">
+        <div class="itemContent default" on-tap="_selectItem">
+          <div class="productPrice">
+            [[itemData.price]]
           </div>
           <paper-ripple></paper-ripple>
-          <div class$="{{itemContentNameClassName}}">[[item.name]]</div>
+          <div class$="{{itemContentNameClassName}}">[[itemData.name]]</div>
         </div>
       </template>
     </div>
 
-    <template is="dom-if" if="[[_checkType('default', item.type)]]">
-      <div class="itemContent default" on-tap="_selectItem">
-        <paper-ripple></paper-ripple>
-        <div class$="{{itemContentNameClassName}}">[[item.name]]</div>
-      </div>
-    </template>
-  </div>
-
   </template>
 
   <script>
-    class NcItemsGridItem extends Polymer.mixinBehaviors([Polymer.AppLocalizeBehavior], Polymer.Element) {
+    class NcItemsGridItem extends Polymer.mixinBehaviors([Polymer.AppLocalizeBehavior], Polymer.MutableData(Polymer.Element)) {
       static get is() {
         return 'nc-items-grid-item';
       }
@@ -192,21 +187,9 @@ Copyright (c) 2017 Neo
             reflectToAttribute: true,
             observer: '_dimensionChanged'
           },
-          showPrice: {
-            type: Boolean,
-            value: true,
-            notify: true
-          },
-          item: {
+          itemData: {
             type: Object,
-            value: {
-              code: "",
-              name: "",
-              type: "",
-              urlImage: "",
-              bgColor: "red"
-            },
-            observer: '_itemChanged'
+            observer: '_itemDataChanged'
           },
           itemContentNameClassName: {
             type: String,
@@ -221,43 +204,35 @@ Copyright (c) 2017 Neo
         this.updateStyles({'--item-content-height':   this.dimension + 'px' });
       }
 
-      _itemChanged(){
+      _itemDataChanged(){
         let itemContentBackgroundColor = 'transparent';
         let itemContentBackgroundImage = 'none';
 
-        switch (this.item.type) {
+        switch (this.itemData.type) {
           case "folder":
             this.itemContentNameClassName = 'itemContentNameCenter';
             break;
-          case "product":
-            if (this.item.urlImage){
-              itemContentBackgroundImage = 'url(' +  this.item.urlImage + ')';
-            }
-
-            if (this.item.backgroundColor){
-              itemContentBackgroundColor = this.item.backgroundColor;
-            }
-
-            if ((!this.item.urlImage) || (this.item.urlImage == "")){
-              this.itemContentNameClassName = 'itemContentNameCenter';
-            } else{
-              this.itemContentNameClassName = 'itemContentName';
-            }
-            break;
           default:
-            if (this.item.urlImage){
-              itemContentBackgroundImage = 'url(' +  this.item.urlImage + ')';
+
+            if (this.itemData.urlImage){
+              itemContentBackgroundImage = 'url(' +  this.itemData.urlImage + ')';
             }
 
-            if (this.item.backgroundColor){
-              itemContentBackgroundColor = this.item.backgroundColor;
+            if (this.itemData.backgroundColor){
+              itemContentBackgroundColor = this.itemData.backgroundColor;
             }
 
-            if ((!this.item.urlImage) || (this.item.urlImage == "")){
+            if ((!this.itemData.urlImage) || (this.itemData.urlImage == "")){
               this.itemContentNameClassName = 'itemContentNameCenter';
             } else{
               this.itemContentNameClassName = 'itemContentName';
             }
+
+            // Only pack options has this properties
+            if (this.itemData.minQty === 1){
+              this.itemContentNameClassName = this.itemContentNameClassName + ' required';
+            }
+
             break;
         }
 
@@ -265,7 +240,7 @@ Copyright (c) 2017 Neo
       }
 
       _selectItem() {
-        switch (this.item.type) {
+        switch (this.itemData.type) {
           case "parentFolder":
             this.dispatchEvent(new CustomEvent('parent-folder-selected', {bubbles: true, composed: true }));
             break;
@@ -276,19 +251,20 @@ Copyright (c) 2017 Neo
             this.dispatchEvent(new CustomEvent('previous-button-pressed', {bubbles: true, composed: true }));
             break;
           case "folder":
-            this.dispatchEvent(new CustomEvent('folder-selected', {detail: this.item, bubbles: true, composed: true }));
+            this.dispatchEvent(new CustomEvent('folder-selected', {detail: this.itemData, bubbles: true, composed: true }));
             break;
           default:
-            this.dispatchEvent(new CustomEvent('item-selected', {detail: this.item, bubbles: true, composed: true }));
+            this.dispatchEvent(new CustomEvent('item-selected', {detail: this.itemData, bubbles: true, composed: true }));
             break;
         }
       }
 
       _checkType(type, itemType){
-        itemType = (itemType) ? (itemType) : 'product';
+        itemType = (itemType) ? (itemType) : 'default';
 
         return (type==itemType);
       }
+      
     }
     window.customElements.define(NcItemsGridItem.is, NcItemsGridItem);
   </script>

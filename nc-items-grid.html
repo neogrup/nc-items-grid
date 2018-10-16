@@ -4,6 +4,7 @@ Copyright (c) 2017 Neo
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/mixins/mutable-data.html">
 <link rel="import" href="../polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="../app-localize-behavior/app-localize-behavior.html">
 <link rel="import" href="../iron-list/iron-list.html">
@@ -100,7 +101,7 @@ Copyright (c) 2017 Neo
       </ul>
     </template>
 
-    <iron-list grid>
+    <iron-list grid items="[[level]]" mutable-data>
       <div id="loading" class="loading" hidden$="[[!loading]]">
         <div class="spinnerLoading">
           <paper-spinner active></paper-spinner>
@@ -108,13 +109,13 @@ Copyright (c) 2017 Neo
       </div>
       <template>
         <nc-items-grid-item
-                item="[[item]]"
-                dimension="[[dimension]]"
-                show-price="[[showPrice]]"
-                on-parent-folder-selected="_parentFolderSelected"
-                on-next-button-pressed="_nextButtonPressed"
-                on-previous-button-pressed="_previousButtonPressed"
-                on-folder-selected="_folderSelected">
+            item-data="[[item]]"
+            dimension="[[dimension]]"
+            show-price="[[showPrice]]"
+            on-parent-folder-selected="_parentFolderSelected"
+            on-next-button-pressed="_nextButtonPressed"
+            on-previous-button-pressed="_previousButtonPressed"
+            on-folder-selected="_folderSelected">
         </nc-items-grid-item>
       </template>
     </iron-list>
@@ -122,17 +123,16 @@ Copyright (c) 2017 Neo
   </template>
 
   <script>
-    class NcItemsGrid extends Polymer.mixinBehaviors([Polymer.AppLocalizeBehavior], Polymer.Element) {
+    class NcItemsGrid extends Polymer.mixinBehaviors([Polymer.AppLocalizeBehavior], Polymer.MutableData(Polymer.Element)) {
       static get is() {
         return 'nc-items-grid';
       }
       
       static get properties() {
         return {
-          data: {
-            type: Object,
-            value: [],
-            observer: '_dataChanged'
+          itemsGridData: {
+            type: Array,
+            observer: '_itemsGridDataChanged'
           },
           loading: {
             type: Boolean,
@@ -283,7 +283,7 @@ Copyright (c) 2017 Neo
         }
       }
 
-      _dataChanged(){       
+      _itemsGridDataChanged(){       
         this.currentLevel = 0;
         this.currentLevelPage = 0;
         this.levelIndexFrom = 0;
@@ -295,9 +295,9 @@ Copyright (c) 2017 Neo
         let showParentFolder = false;
         let showPreviousButton = false;
 
-        if (this.data) {
-          if (this.data.length > 0){
-            this.levels.push(this.data);
+        if (this.itemsGridData) {
+          if (this.itemsGridData.length > 0){
+            this.levels.push(this.itemsGridData);
             showNextButton = this.levels[this.currentLevel].length > this.limitItemsPerLevel - 1;
             if (showNextButton) {
               this.levelIndexTo = this.levelIndexTo + this.limitItemsPerLevel - 1 - 1;
@@ -344,8 +344,6 @@ Copyright (c) 2017 Neo
             this.level.unshift(this.parentFolder);
           }
         }
-
-        this.shadowRoot.querySelector('iron-list').items = this.level;
       }
 
       _parentFolderSelected(){
