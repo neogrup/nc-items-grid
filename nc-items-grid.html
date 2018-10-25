@@ -297,14 +297,17 @@ Copyright (c) 2017 Neo
 
         if (this.itemsGridData) {
           if (this.itemsGridData.length > 0){
+            this.gridResize();
 
-            // Remove folder without elements
-            let i;
-            for (i in this.itemsGridData){
-              if (this.itemsGridData[i].content.length == 0){
-                this.itemsGridData.splice(i,1);
+            // Remove folder without elements (starting from the end)
+            for (let i = this.itemsGridData.length - 1; i >= 0; i--){
+              if (this.itemsGridData[i].content){
+                if (this.itemsGridData[i].content.length == 0){
+                  this.itemsGridData.splice(i,1);
+                }
               }
             }
+
 
             this.levels.push(this.itemsGridData);
             showNextButton = this.levels[this.currentLevel].length > this.limitItemsPerLevel - 1;
@@ -336,7 +339,6 @@ Copyright (c) 2017 Neo
       }
 
       _setPage(_showPrevious, _showParent, _showNext, _from, _to) {
-        console.log('_setPage',_showPrevious, _showParent, _showNext, _from, _to)
         if (this.limitItemsPerLevel != 0 ) {
           this.level = this.levels[this.currentLevel].slice(this.levelIndexFrom, this.levelIndexTo + 1);
 
@@ -362,7 +364,6 @@ Copyright (c) 2017 Neo
           }
         }
 
-        console.log(this.level)
       }
 
       _parentFolderSelected(){
@@ -462,9 +463,8 @@ Copyright (c) 2017 Neo
         this.levelIndexFrom = 0;
         this.levels.push(item.detail.content);
 
-        // Remove folder without elements
-        let i;
-        for (i in item.detail.content){
+        // Remove folder without elements (starting from the end)
+        for (let i = item.detail.content.length - 1; i >= 0; i--){
           if (item.detail.content[i].content){
             if (item.detail.content[i].content.length == 0){
               item.detail.content.splice(i,1);
