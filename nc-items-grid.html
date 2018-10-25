@@ -297,6 +297,15 @@ Copyright (c) 2017 Neo
 
         if (this.itemsGridData) {
           if (this.itemsGridData.length > 0){
+
+            // Remove folder without elements
+            let i;
+            for (i in this.itemsGridData){
+              if (this.itemsGridData[i].content.length == 0){
+                this.itemsGridData.splice(i,1);
+              }
+            }
+
             this.levels.push(this.itemsGridData);
             showNextButton = this.levels[this.currentLevel].length > this.limitItemsPerLevel - 1;
             if (showNextButton) {
@@ -327,8 +336,11 @@ Copyright (c) 2017 Neo
       }
 
       _setPage(_showPrevious, _showParent, _showNext, _from, _to) {
+        console.log('_setPage',_showPrevious, _showParent, _showNext, _from, _to)
         if (this.limitItemsPerLevel != 0 ) {
           this.level = this.levels[this.currentLevel].slice(this.levelIndexFrom, this.levelIndexTo + 1);
+
+
           if (_showPrevious) {
             this.level.unshift(this.previousButton);
           }
@@ -339,11 +351,18 @@ Copyright (c) 2017 Neo
           this.level =  this.levels[this.currentLevel];
         }
 
+
         if (_showParent) {
-          if (this.level[0].type != 'parentFolder'){
+          if (this.level[0]){
+            if (this.level[0].type != 'parentFolder'){
+              this.level.unshift(this.parentFolder);
+            }
+          } else{
             this.level.unshift(this.parentFolder);
           }
         }
+
+        console.log(this.level)
       }
 
       _parentFolderSelected(){
@@ -443,6 +462,18 @@ Copyright (c) 2017 Neo
         this.levelIndexFrom = 0;
         this.levels.push(item.detail.content);
 
+        // Remove folder without elements
+        let i;
+        for (i in item.detail.content){
+          if (item.detail.content[i].content){
+            if (item.detail.content[i].content.length == 0){
+              item.detail.content.splice(i,1);
+            }
+          }
+        }
+
+        
+
         let showParentFolder = true;
         let showPreviousButton = false;
         let showNextButton = this.levels[this.currentLevel].length > this.limitItemsPerLevel - 1;
@@ -463,7 +494,7 @@ Copyright (c) 2017 Neo
         }
 
         if (this.autoFlow) {
-          if (this.level.length <= 2) { //parent folder & and the folder itself
+          if (this.level.length == 2) { //parent folder and the folder itself
             if (this.level[1].type == "folder") { // 1 'cause 0 is parent
               this._folderSelected({detail:this.level[1]});
             }

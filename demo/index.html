@@ -40,7 +40,7 @@ Copyright (c) 2017 Neo
 
       .containerProducts{
         height: 76px;
-        width: 456px;
+        width: 400px;
         background-color: #EF9A9A;
       }
 
@@ -54,7 +54,7 @@ Copyright (c) 2017 Neo
     </style>
     <iron-ajax id="getProductsList"
             auto
-            url="data/products_3"
+            url="data/products_2"
             method="get"
             handle-as="json"
             last-response="{{productsList}}">
@@ -70,7 +70,7 @@ Copyright (c) 2017 Neo
       
     <div class="containerProducts">
       <nc-items-grid
-                  data='{{productsList.data.data}}'
+                  items-grid-data='{{productsList.data.data}}'
                   language="es"
                   _breadcrumb
                   is-paginated
@@ -79,17 +79,6 @@ Copyright (c) 2017 Neo
                   show-price="{{showPrice}}">
       </nc-items-grid>
     </div>
-
-    <!-- <div class="containerUsers">
-      <nc-items-grid
-                  data='{{usersList.data.data}}'
-                  language="es"
-                  _breadcrumb
-                  is-paginated
-                  auto-flow
-                  dimension="130">
-      </nc-items-grid>
-    </div> -->
 
   </template>
   <script>
