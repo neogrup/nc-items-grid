@@ -262,7 +262,7 @@ Copyright (c) 2017 Neo
           this.limitItemsPerLevel = 0;
         }
 
-        console.log('gridResize', this.limitItemsPerLevel, this.dimension, this.offsetHeight, this.offsetWidth, this.level)
+        // console.log('gridResize', this.limitItemsPerLevel, this.dimension, this.offsetHeight, this.offsetWidth, this.level)
       }
 
       _computeCurrentLevelPageBreadcrumb(currentLevelPage){
@@ -288,7 +288,7 @@ Copyright (c) 2017 Neo
       }
 
       _itemsGridDataChanged(){   
-        console.log('_itemsGridDataChanged');    
+        // console.log('_itemsGridDataChanged');    
         this.currentLevel = 0;
         this.currentLevelPage = 0;
         this.levelIndexFrom = 0;
@@ -315,7 +315,7 @@ Copyright (c) 2017 Neo
 
 
             this.levels.push(this.itemsGridData);
-            console.log(this.levels[this.currentLevel].length, this.limitItemsPerLevel)
+            // console.log(this.levels[this.currentLevel].length, this.limitItemsPerLevel)
             showNextButton = this.levels[this.currentLevel].length -1 > this.limitItemsPerLevel;
             if (showNextButton) {
               this.levelIndexTo = this.levelIndexTo + this.limitItemsPerLevel - 1 - 1;
@@ -345,7 +345,7 @@ Copyright (c) 2017 Neo
       }
 
       _setPage(_showPrevious, _showParent, _showNext, _from, _to) {
-        console.log('_setPage',_showPrevious, _showParent, _showNext, _from, _to);
+        // console.log('_setPage',_showPrevious, _showParent, _showNext, _from, _to);
         if (this.limitItemsPerLevel != 0 ) {
           this.level = this.levels[this.currentLevel].slice(this.levelIndexFrom, this.levelIndexTo + 1);
 
@@ -371,7 +371,7 @@ Copyright (c) 2017 Neo
           }
         }
 
-        console.log(this.level.toString())
+        // console.log(this.level.toString())
         // this.level.forEach(function(element) {
         //   console.log(element);
         // });
