@@ -141,7 +141,6 @@ Copyright (c) 2017 Neo
           language: String,
           dimension: {
             type: Number,
-            value: 100,
             observer: '_dimensionChanged',
             reflectToAttribute: true
           },
@@ -241,24 +240,29 @@ Copyright (c) 2017 Neo
       }
 
       _dimensionChanged(){
-        this.gridResize();
+        // this.gridResize();
       }
 
       gridResize(){
+        
         if (this.isPaginated) {
-          let h = this.offsetHeight;
-          let cols = Math.trunc(this.offsetWidth / (this.dimension + 6)); /* 6: 2px left margin +  2px right margin + 1px left border + 1px right border */
-
-          if (this.breadcrumb){
-            h = h - 28;
+          if ((this.offsetHeight !== 0) && (this.offsetHeight !== 0 )){
+            let h = this.offsetHeight;
+            
+            let cols = Math.trunc(this.offsetWidth / (this.dimension + 6)); /* 6: 2px left margin +  2px right margin + 1px left border + 1px right border */
+            
+            if (this.breadcrumb){
+              h = h - 28;
+            }
+            
+            let rows = Math.trunc(h / (this.dimension + 6)); /* 6: 2px top margin +  2px bottom margin + 1px top border + 1px bottom border */
+            this.limitItemsPerLevel = cols*rows;
           }
-          
-          let rows = Math.trunc(h / (this.dimension + 6)); /* 6: 2px top margin +  2px bottom margin + 1px top border + 1px bottom border */
-          this.limitItemsPerLevel = cols*rows;
-
         } else {
           this.limitItemsPerLevel = 0;
         }
+
+        console.log('gridResize', this.limitItemsPerLevel, this.dimension, this.offsetHeight, this.offsetWidth, this.level)
       }
 
       _computeCurrentLevelPageBreadcrumb(currentLevelPage){
@@ -283,7 +287,8 @@ Copyright (c) 2017 Neo
         }
       }
 
-      _itemsGridDataChanged(){       
+      _itemsGridDataChanged(){   
+        console.log('_itemsGridDataChanged');    
         this.currentLevel = 0;
         this.currentLevelPage = 0;
         this.levelIndexFrom = 0;
@@ -310,7 +315,8 @@ Copyright (c) 2017 Neo
 
 
             this.levels.push(this.itemsGridData);
-            showNextButton = this.levels[this.currentLevel].length > this.limitItemsPerLevel - 1;
+            console.log(this.levels[this.currentLevel].length, this.limitItemsPerLevel)
+            showNextButton = this.levels[this.currentLevel].length -1 > this.limitItemsPerLevel;
             if (showNextButton) {
               this.levelIndexTo = this.levelIndexTo + this.limitItemsPerLevel - 1 - 1;
             } else{
@@ -339,6 +345,7 @@ Copyright (c) 2017 Neo
       }
 
       _setPage(_showPrevious, _showParent, _showNext, _from, _to) {
+        console.log('_setPage',_showPrevious, _showParent, _showNext, _from, _to);
         if (this.limitItemsPerLevel != 0 ) {
           this.level = this.levels[this.currentLevel].slice(this.levelIndexFrom, this.levelIndexTo + 1);
 
@@ -364,9 +371,15 @@ Copyright (c) 2017 Neo
           }
         }
 
+        console.log(this.level.toString())
+        // this.level.forEach(function(element) {
+        //   console.log(element);
+        // });
+        console.warn('******************************************************');
       }
 
       _parentFolderSelected(){
+        // console.log('_parentFolderSelected')
         this.currentLevel--;
         this.currentLevelPage = 0;
         this.levelIndexFrom = 0;
@@ -376,12 +389,10 @@ Copyright (c) 2017 Neo
         let showParentFolder = false;
         let showPreviousButton = false;
 
-        
-
         if (this.currentLevel > 0){
           showParentFolder = true;
         }
-        showNextButton = this.levels[this.currentLevel].length > this.limitItemsPerLevel - 1;
+        showNextButton = this.levels[this.currentLevel].length -1 > this.limitItemsPerLevel;
 
         if (showNextButton){
           this.levelIndexTo = this.levelIndexFrom + this.limitItemsPerLevel - 1 - 1;
@@ -450,6 +461,7 @@ Copyright (c) 2017 Neo
       }
 
       _selectFolder (item) {
+        // console.log('_selectFolder')
         let itemSelected = item.model.__data.item;
         for (let i=this.currentLevel; i>itemSelected.level; i--) {
           this._parentFolderSelected();
@@ -457,6 +469,7 @@ Copyright (c) 2017 Neo
       }
 
       _folderSelected(item) {
+        // console.log('_folderSelected')
         this.currentLevel++;
         this.currentLevelPage = 0;
 
@@ -471,8 +484,6 @@ Copyright (c) 2017 Neo
             }
           }
         }
-
-        
 
         let showParentFolder = true;
         let showPreviousButton = false;
