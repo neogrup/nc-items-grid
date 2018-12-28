@@ -19,6 +19,8 @@ Copyright (c) 2017 Neo
         height: 100%;
         display: flex;
         flex-direction: column;
+        --items-grid-margin-left: 0px;
+        --items-grid-margin-right: 0px;
       }
 
       ul.breadcrumb {
@@ -62,6 +64,10 @@ Copyright (c) 2017 Neo
       iron-list {
         height: 100%;
         width: 100%;
+        --iron-list-items-container: {
+          margin-left: var(--items-grid-margin-left);
+          margin-right: var(--items-grid-margin-right);
+        };
       }
 
       .loading{
@@ -95,7 +101,7 @@ Copyright (c) 2017 Neo
     <template is="dom-if" if="[[breadcrumb]]">
       <ul class="breadcrumb">
         <template is="dom-repeat" items="[[breadcrumbList]]">
-          <li ><span on-tap="_selectFolder">[[item.name]]</span></li>
+          <li><span on-tap="_selectFolder">[[item.name]]</span></li>
         </template>
         <li>[[currentLevelPageBreadcrumb]] / [[currentLevelTotalPages]]</li>
       </ul>
@@ -110,7 +116,10 @@ Copyright (c) 2017 Neo
       <template>
         <nc-items-grid-item
             item-data="[[item]]"
-            dimension="[[dimension]]"
+            item-width="[[itemWidth]]"
+            item-height="[[itemHeight]]"
+            item-margin="[[itemMargin]]"
+            item-view-mode="[[itemViewMode]]"
             show-price="[[showPrice]]"
             on-parent-folder-selected="_parentFolderSelected"
             on-next-button-pressed="_nextButtonPressed"
@@ -139,9 +148,24 @@ Copyright (c) 2017 Neo
             value: false
           },
           language: String,
-          dimension: {
+          itemWidth:{
             type: Number,
-            observer: '_dimensionChanged',
+            value: 100,
+            reflectToAttribute: true,
+          },
+          itemHeight:{
+            type: Number,
+            value: 100,
+            reflectToAttribute: true
+          },
+          itemMargin:{
+            type: Number,
+            value: 2,
+            reflectToAttribute: true
+          },
+          itemViewMode:{
+            type: String,
+            value: 'default',
             reflectToAttribute: true
           },
           showPrice: Boolean,
@@ -229,6 +253,10 @@ Copyright (c) 2017 Neo
           isPaginated: {
             type: Boolean,
             value: false
+          },
+          itemsGridCenter: {
+            type: Boolean,
+            value: false
           }
         }
       }
@@ -239,30 +267,35 @@ Copyright (c) 2017 Neo
         this.loadResources(this.resolveUrl('static/translations.json'));
       }
 
-      _dimensionChanged(){
-        // this.gridResize();
-      }
-
       gridResize(){
         
         if (this.isPaginated) {
           if ((this.offsetHeight !== 0) && (this.offsetHeight !== 0 )){
             let h = this.offsetHeight;
             
-            let cols = Math.trunc(this.offsetWidth / (this.dimension + 6)); /* 6: 2px left margin +  2px right margin + 1px left border + 1px right border */
+            let cols = Math.trunc(this.offsetWidth / (this.itemWidth + (this.itemMargin * 2) + 2)); /* 2: 1px left border + 1px right border */
             
             if (this.breadcrumb){
               h = h - 28;
             }
             
-            let rows = Math.trunc(h / (this.dimension + 6)); /* 6: 2px top margin +  2px bottom margin + 1px top border + 1px bottom border */
+            let rows = Math.trunc(h / (this.itemHeight + (this.itemMargin * 2) + 2)); /* 2: 1px left border + 1px right border */
             this.limitItemsPerLevel = cols*rows;
           }
         } else {
           this.limitItemsPerLevel = 0;
         }
 
-        // console.log('gridResize', this.limitItemsPerLevel, this.dimension, this.offsetHeight, this.offsetWidth, this.level)
+        if(this.itemsGridCenter){
+          let itemsGridMargin = (this.offsetWidth - (this.itemsGridData.length * (this.itemWidth + (this.itemMargin * 2) + 2))) / 2;
+          itemsGridMargin = itemsGridMargin + 'px';
+
+          this.updateStyles({
+            '--items-grid-margin-left': itemsGridMargin,
+            '--items-grid-margin-right': itemsGridMargin
+          });
+        }
+
       }
 
       _computeCurrentLevelPageBreadcrumb(currentLevelPage){
@@ -313,10 +346,10 @@ Copyright (c) 2017 Neo
               }
             }
 
-
             this.levels.push(this.itemsGridData);
-            // console.log(this.levels[this.currentLevel].length, this.limitItemsPerLevel)
-            showNextButton = this.levels[this.currentLevel].length -1 > this.limitItemsPerLevel;
+            
+            // console.log('_itemsGridDataChanged', this.levels[this.currentLevel].length, this.limitItemsPerLevel)
+            showNextButton = this.levels[this.currentLevel].length > this.limitItemsPerLevel;
             if (showNextButton) {
               this.levelIndexTo = this.levelIndexTo + this.limitItemsPerLevel - 1 - 1;
             } else{
@@ -345,7 +378,7 @@ Copyright (c) 2017 Neo
       }
 
       _setPage(_showPrevious, _showParent, _showNext, _from, _to) {
-        // console.log('_setPage',_showPrevious, _showParent, _showNext, _from, _to);
+        
         if (this.limitItemsPerLevel != 0 ) {
           this.level = this.levels[this.currentLevel].slice(this.levelIndexFrom, this.levelIndexTo + 1);
 
@@ -357,7 +390,7 @@ Copyright (c) 2017 Neo
             this.level.push(this.nextButton);
           }
         } else {
-          this.level =  this.levels[this.currentLevel];
+          this.level = this.levels[this.currentLevel];
         }
 
 
@@ -370,6 +403,8 @@ Copyright (c) 2017 Neo
             this.level.unshift(this.parentFolder);
           }
         }
+
+        // console.log('_setPage',_showPrevious, _showParent, _showNext, _from, _to, this.level);
 
         // console.log(this.level.toString())
         // this.level.forEach(function(element) {
