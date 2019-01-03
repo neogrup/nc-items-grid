@@ -120,7 +120,7 @@ Copyright (c) 2017 Neo
             item-height="[[itemHeight]]"
             item-margin="[[itemMargin]]"
             item-view-mode="[[itemViewMode]]"
-            show-price="[[showPrice]]"
+            hide-item-name="[[hideItemName]]"
             on-parent-folder-selected="_parentFolderSelected"
             on-next-button-pressed="_nextButtonPressed"
             on-previous-button-pressed="_previousButtonPressed"
@@ -168,7 +168,7 @@ Copyright (c) 2017 Neo
             value: 'default',
             reflectToAttribute: true
           },
-          showPrice: Boolean,
+          hideItemName: Boolean,
           levels: {
             type: Array,
             value: []
@@ -496,8 +496,7 @@ Copyright (c) 2017 Neo
       }
 
       _selectFolder (item) {
-        // console.log('_selectFolder')
-        let itemSelected = item.model.__data.item;
+        let itemSelected = item.model.item;
         for (let i=this.currentLevel; i>itemSelected.level; i--) {
           this._parentFolderSelected();
         }
@@ -546,6 +545,18 @@ Copyright (c) 2017 Neo
             }
           }
         }
+      }
+    
+      selectTopFolder(){
+        for (let i=this.currentLevel; i>0; i--) {
+          this._parentFolderSelected();
+        }
+
+        for (let i=this.currentLevelPage; i>0; i--) {
+          this._previousButtonPressed();
+        }
+
+        
       }
     }
     window.customElements.define(NcItemsGrid.is, NcItemsGrid);

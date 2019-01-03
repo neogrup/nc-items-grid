@@ -41,30 +41,35 @@ Copyright (c) 2017 Neo
       }
 
       .item-content {
-        border-radius: 25px;
+        border-radius: 10px;
         overflow: hidden;
         position: relative;
         width: var(--item-content-width);
         height: var(--item-content-height);
         margin: var(--item-margin);
         cursor: pointer;
-        border: 1px solid #FFCC80;;
+        border: 1px solid var(--app-secondary-color, #253855);
+        box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
+                    0 1px 18px 0 rgba(0, 0, 0, 0.12),
+                    0 3px 5px -1px rgba(0, 0, 0, 0.4);
       }
 
       .next-button{
         background-color: transparent;
         border-color: transparent;
+        box-shadow: none;
       }
 
       .previous-button{
         background-color: transparent;
         border-color: transparent;
+        box-shadow: none;
       }
 
       .parent-folder{
         border-color: var(--app-secondary-color, #253855);
         background-color: var(--app-secondary-color, #253855);
-        border-radius: 25px;
+        border-radius: 10px;
         overflow: hidden;
         color: white;
         font-size: 2.2em;
@@ -77,7 +82,7 @@ Copyright (c) 2017 Neo
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
-        border-radius: 25px;
+        border-radius: 10px;
         overflow: hidden;
         color: white;
         font-size: 1.5em;
@@ -90,11 +95,12 @@ Copyright (c) 2017 Neo
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
+        
       }
 
       .item-content-header{
         height: var(--item-content-header-height);
-        background: #FFCC80;
+        background: #FFA726;
         @apply --layout-horizontal;
         @apply --layout-center-justified;
         @apply --layout-center;
@@ -117,7 +123,7 @@ Copyright (c) 2017 Neo
 
       .item-content-footer{
         height: var(--item-content-footer-height);
-        background-color: #FFCC80;
+        background-color: #FFA726;
         @apply --layout-horizontal;
         @apply --layout-center-justified;
         @apply --layout-center;
@@ -140,7 +146,7 @@ Copyright (c) 2017 Neo
         bottom: 0px;
         left: 0;
         right: 0;
-        background: linear-gradient(to bottom, rgba(0,0,0,0.5) 100%, rgba(0,0,0,0.5) 100%);
+        background: linear-gradient(to bottom, rgba(0,0,0,0.8) 100%, rgba(0,0,0,0.8) 100%);
         color: white;
         overflow: hidden;
         padding: 5px 0;
@@ -215,7 +221,7 @@ Copyright (c) 2017 Neo
             <div class="product-price">
               [[itemData.price]]
             </div>
-            <div class$="{{itemContentNameClassName}}">[[itemData.name]]</div>
+            <div class$="{{itemContentNameClassName}}" hidden$=[[hideItemName]]>[[itemData.name]]</div>
           </div>
         </template>
 
@@ -247,6 +253,10 @@ Copyright (c) 2017 Neo
       
       static get properties() {
         return {
+          hideItemName:{
+            type: Boolean,
+            value: false
+          },
           itemWidth:{
             type: Number
           },
@@ -318,8 +328,6 @@ Copyright (c) 2017 Neo
 
             break;
         }
-
-
 
         if (this.itemHeight > this.itemWidth){
           let diffHeight = this.itemHeight - this.itemWidth
