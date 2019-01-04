@@ -1,11 +1,14 @@
 {
   "en":{
-    "ITEMS_GRID_BREADCRUMB_ALL": "All"
+    "ITEMS_GRID_BREADCRUMB_ALL": "All",
+    "ITEM_GRID_PARENT_FOLDER": "Back"
   },
   "es": {
-    "ITEMS_GRID_BREADCRUMB_ALL": "Todos"
+    "ITEMS_GRID_BREADCRUMB_ALL": "Todos",
+    "ITEM_GRID_PARENT_FOLDER": "Volver"
   },
   "ca":{
-    "ITEMS_GRID_BREADCRUMB_ALL": "Tots"
+    "ITEMS_GRID_BREADCRUMB_ALL": "Tots",
+    "ITEM_GRID_PARENT_FOLDER": "Tornar"
   }
 }

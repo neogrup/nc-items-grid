@@ -1,6 +1,6 @@
 {
   "name": "nc-items-grid",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "Polymer component to display items grid (products, folders, buttons, users, etc.) in a grid in tree structure",
   "authors": [
     "edgar.piera@neogrup.com"
