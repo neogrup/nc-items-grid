@@ -23,12 +23,20 @@ Copyright (c) 2017 Neo
         --item-content-width: 100px;
         --item-content-height: 100px;
 
+        --item-content-border-radius: 5px;
+        --item-content-box-shadow: none;
+
         --item-content-header-height: 20px;
         --item-content-image-height: 80px;
         --item-content-footer-height: 20px;
 
         --item-margin: 2px;
       }
+
+      :host([item-selected]) > div.item-container > div.default {
+        filter: brightness(80%);
+      }
+
 
       .item-container{
         -webkit-touch-callout: none; /* iOS Safari */
@@ -41,7 +49,7 @@ Copyright (c) 2017 Neo
       }
 
       .item-content {
-        border-radius: 10px;
+        border-radius: var(--item-content-border-radius);
         overflow: hidden;
         position: relative;
         width: var(--item-content-width);
@@ -49,9 +57,7 @@ Copyright (c) 2017 Neo
         margin: var(--item-margin);
         cursor: pointer;
         border: 1px solid var(--app-secondary-color, #253855);
-        box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
-                    0 1px 18px 0 rgba(0, 0, 0, 0.12),
-                    0 3px 5px -1px rgba(0, 0, 0, 0.4);
+        box-shadow: var(--item-content-box-shadow);
       }
 
       .next-button{
@@ -69,7 +75,6 @@ Copyright (c) 2017 Neo
       .parent-folder{
         border-color: var(--app-secondary-color, #253855);
         background-color: var(--app-secondary-color, #253855);
-        border-radius: 10px;
         overflow: hidden;
         color: white;
         font-size: 2.2em;
@@ -82,7 +87,6 @@ Copyright (c) 2017 Neo
         background-position: center;
         background-repeat: no-repeat;
         background-size: cover;
-        border-radius: 10px;
         overflow: hidden;
         color: white;
         font-size: 1.5em;
@@ -97,6 +101,7 @@ Copyright (c) 2017 Neo
         background-size: cover;
         
       }
+
 
       .item-content-header{
         height: var(--item-content-header-height);
@@ -279,6 +284,20 @@ Copyright (c) 2017 Neo
           itemContentNameClassName: {
             type: String,
             value: 'item-content-name'
+          },
+          keepItemSelected:{
+            type: Boolean,
+            value: false
+          },
+          itemSelectedId: {
+            type: String,
+            notify: true,
+            observer: '_itemSelectedIdChanged'
+          },
+          itemSelected: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
           }
         }
       }
@@ -345,9 +364,8 @@ Copyright (c) 2017 Neo
             '--item-content-image-height': itemContentImageHeight + 'px',
             '--item-content-footer-height': itemContentFooterHeight + 'px'
           });
-        //  console.log(itemContentHeaderHeight, itemContentImageHeight, itemContentFooterHeight)
-
         }
+
 
         this.updateStyles({
           '--item-content-background-color':   itemContentBackgroundColor,
@@ -357,6 +375,14 @@ Copyright (c) 2017 Neo
           '--item-margin': this.itemMargin + 'px'
         });
 
+        
+        if (this.keepItemSelected){
+          if (this.itemSelectedId === this.itemData.code){
+            this.itemSelected = true;  
+          } else {
+            this.itemSelected = false;  
+          }
+        }
       }
 
       _selectItem() {
@@ -394,7 +420,15 @@ Copyright (c) 2017 Neo
         priceText = accounting.formatMoney(price, "€", 2, ".", ",","%v %s");
         return priceText;
       }
-      
+
+      _itemSelectedIdChanged(){
+        if (this.itemSelectedId === this.itemData.code){
+          this.itemSelected = true;  
+        } else {
+          this.itemSelected = false;  
+        }
+      }
+
     }
     window.customElements.define(NcItemsGridItem.is, NcItemsGridItem);
   </script>

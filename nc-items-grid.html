@@ -38,6 +38,8 @@ Copyright (c) 2017 Neo
         flex-direction: column;
         --items-grid-margin-left: 0px;
         --items-grid-margin-right: 0px;
+        --items-grid-item-content-border-radius: 5px;
+        --items-grid-item-content-box-shadow: none;
       }
 
       ul.breadcrumb {
@@ -111,8 +113,12 @@ Copyright (c) 2017 Neo
         position: relative;
         top: 40%;
       }
-    </style>
 
+      nc-items-grid-item{
+        --item-content-border-radius: var(--items-grid-item-content-border-radius);
+        --item-content-box-shadow: var(--items-grid-item-content-box-shadow);
+      }
+    </style>
     
 
     <template is="dom-if" if="[[breadcrumb]]">
@@ -132,6 +138,7 @@ Copyright (c) 2017 Neo
       </div>
       <template>
         <nc-items-grid-item
+            id="slot[[item.code]]"
             language="{{language}}"
             item-data="[[item]]"
             item-width="[[itemWidth]]"
@@ -139,6 +146,9 @@ Copyright (c) 2017 Neo
             item-margin="[[itemMargin]]"
             item-view-mode="[[itemViewMode]]"
             hide-item-name="[[hideItemName]]"
+            on-item-selected="_itemSelected"
+            keep-item-selected="[[keepItemSelected]]"
+            item-selected-id=[[itemSelectedId]]
             on-parent-folder-selected="_parentFolderSelected"
             on-next-button-pressed="_nextButtonPressed"
             on-previous-button-pressed="_previousButtonPressed"
@@ -275,12 +285,23 @@ Copyright (c) 2017 Neo
           itemsGridCenter: {
             type: Boolean,
             value: false
+          },
+          keepItemSelected:{
+            type: Boolean,
+            value: false
+          },
+          itemSelectedId: {
+            type: String,
+            notify: true
           }
         }
       }
 
       connectedCallback() {
         super.connectedCallback();
+        
+        window.addEventListener('resize', this._appResize.bind(this));
+
         this.useKeyIfMissing = true;
         this.loadResources(this.resolveUrl('static/translations.json'));
       }
@@ -304,9 +325,12 @@ Copyright (c) 2017 Neo
           this.limitItemsPerLevel = 0;
         }
 
+          
         if(this.itemsGridCenter){
           let itemsGridMargin = (this.offsetWidth - (this.itemsGridData.length * (this.itemWidth + (this.itemMargin * 2) + 2))) / 2;
           itemsGridMargin = itemsGridMargin + 'px';
+
+          
 
           this.updateStyles({
             '--items-grid-margin-left': itemsGridMargin,
@@ -339,7 +363,6 @@ Copyright (c) 2017 Neo
       }
 
       _itemsGridDataChanged(){   
-        // console.log('_itemsGridDataChanged');    
         this.currentLevel = 0;
         this.currentLevelPage = 0;
         this.levelIndexFrom = 0;
@@ -422,13 +445,8 @@ Copyright (c) 2017 Neo
           }
         }
 
-        // console.log('_setPage',_showPrevious, _showParent, _showNext, _from, _to, this.level);
-
-        // console.log(this.level.toString())
-        // this.level.forEach(function(element) {
-        //   console.log(element);
-        // });
-        // console.warn('******************************************************');
+        this.shadowRoot.querySelector('iron-list').fire('iron-resize');
+        // this.shadowRoot.querySelector('iron-list').notifyResize();
       }
 
       _parentFolderSelected(){
@@ -564,7 +582,12 @@ Copyright (c) 2017 Neo
           }
         }
       }
-    
+
+      _itemSelected(item){
+        if (!this.keepItemSelected) return;
+        this.itemSelectedId = item.model.item.code;
+      }
+  
       selectTopFolder(){
         for (let i=this.currentLevel; i>0; i--) {
           this._parentFolderSelected();
@@ -575,6 +598,10 @@ Copyright (c) 2017 Neo
         }
 
         
+      }
+    
+      _appResize(){
+        this._itemsGridDataChanged();
       }
     }
     window.customElements.define(NcItemsGrid.is, NcItemsGrid);
