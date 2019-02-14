@@ -367,8 +367,8 @@ Copyright (c) 2017 Neo
         this.currentLevelPage = 0;
         this.levelIndexFrom = 0;
         this.levelIndexTo = 0;
-        this.level = [];
-        this.levels = [];
+        this.set('level',[]);
+        this.set('levels', []);
 
         let showNextButton = false;
         let showParentFolder = false;
@@ -421,7 +421,7 @@ Copyright (c) 2017 Neo
       _setPage(_showPrevious, _showParent, _showNext, _from, _to) {
         
         if (this.limitItemsPerLevel != 0 ) {
-          this.level = this.levels[this.currentLevel].slice(this.levelIndexFrom, this.levelIndexTo + 1);
+          this.set('level', this.levels[this.currentLevel].slice(this.levelIndexFrom, this.levelIndexTo + 1));
 
 
           if (_showPrevious) {
@@ -431,7 +431,7 @@ Copyright (c) 2017 Neo
             this.level.push(this.nextButton);
           }
         } else {
-          this.level = this.levels[this.currentLevel];
+          this.set('level', this.levels[this.currentLevel]);
         }
 
 
@@ -587,6 +587,10 @@ Copyright (c) 2017 Neo
         if (!this.keepItemSelected) return;
         this.itemSelectedId = item.model.item.code;
       }
+
+      selectItem(item){
+        this.itemSelectedId = item;
+      }
   
       selectTopFolder(){
         for (let i=this.currentLevel; i>0; i--) {
@@ -596,8 +600,6 @@ Copyright (c) 2017 Neo
         for (let i=this.currentLevelPage; i>0; i--) {
           this._previousButtonPressed();
         }
-
-        
       }
     
       _appResize(){

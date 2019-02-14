@@ -422,10 +422,12 @@ Copyright (c) 2017 Neo
       }
 
       _itemSelectedIdChanged(){
-        if (this.itemSelectedId === this.itemData.code){
-          this.itemSelected = true;  
-        } else {
-          this.itemSelected = false;  
+        if (this.itemData){
+          if (this.itemSelectedId === this.itemData.code){
+            this.itemSelected = true;  
+          } else {
+            this.itemSelected = false;  
+          }
         }
       }
 
