@@ -1,0 +1,72 @@
+{
+  "apiVersion": "1",
+  "systemTime": "2019-02-27T15:33:12.3258611+01:00",
+  "data": [
+    {
+      "code": "TEST1",
+      "name": "Test 1",
+      "urlImage": "images/test1.png"
+    },
+    {
+      "code": "TEST2",
+      "name": "Test 2",
+      "urlImage": "images/test2.png"
+    },
+    {
+      "code": "TEST3",
+      "name": "Test 3",
+      "urlImage": "images/test3.png"
+    },
+    {
+      "code": "TEST4",
+      "name": "Test 4",
+      "backgroundColor": "#FFCC80"
+    },
+    {
+      "code": "TEST5",
+      "name": "Test 5",
+      "backgroundColor": "#FFCC80"
+    },
+    {
+      "code": "TEST6",
+      "name": "Test 6",
+      "backgroundColor": "#FFCC80"
+    },
+    {
+      "code": "TEST7",
+      "name": "Test 7",
+      "backgroundColor": "#FFCC80"
+    },
+    {
+      "code": "TEST8",
+      "name": "Test 8",
+      "backgroundColor": "#80CBC4"
+    },
+    {
+      "code": "TEST9",
+      "name": "Test 9",
+      "backgroundColor": "#80CBC4"
+    },
+    {
+      "code": "TEST10",
+      "name": "Test 10",
+      "backgroundColor": "#80CBC4"
+    },
+    {
+      "code": "TEST11",
+      "name": "Test 11",
+      "backgroundColor": "#80CBC4"
+    },
+    {
+      "code": "TEST12",
+      "name": "Test 12",
+      "backgroundColor": "#80CBC4"
+    },
+    {
+      "code": "TEST13",
+      "name": "Test 13",
+      "backgroundColor": "#80CBC4"
+    }
+  ],
+  "error": null
+}
