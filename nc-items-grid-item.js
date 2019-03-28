@@ -339,8 +339,10 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         }
 
         // Only pack options has this properties
-        if (this.itemData.minQty === 1){
-          this.itemContentNameClassName = this.itemContentNameClassName + ' required';
+        if(this.itemData.hasOwnProperty('minQty')){
+          if (this.itemData.minQty > this.itemData.used) {
+            this.itemContentNameClassName = this.itemContentNameClassName + ' required';  
+          }
         }
 
         break;

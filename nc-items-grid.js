@@ -1,4 +1,6 @@
 import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+import { Debouncer } from '@polymer/polymer/lib/utils/debounce.js';
+import { timeOut } from '@polymer/polymer/lib/utils/async.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
 import '@polymer/iron-list/iron-list.js';
 import { MutableData } from '@polymer/polymer/lib/mixins/mutable-data.js';
@@ -356,7 +358,7 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
     }
   }
 
-  _itemsGridDataChanged(){   
+  _itemsGridDataChanged(e){  
     this.currentLevel = 0;
     this.currentLevelPage = 0;
     this.levelIndexFrom = 0;
@@ -370,27 +372,33 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
 
     if (this.itemsGridData) {
       if (this.itemsGridData.length > 0){
-        this.gridResize();
 
-        // Remove folder without elements (starting from the end)
-        for (let i = this.itemsGridData.length - 1; i >= 0; i--){
-          if (this.itemsGridData[i].content){
-            if (this.itemsGridData[i].content.length == 0){
-              this.itemsGridData.splice(i,1);
+        // this._resizeDebouncer = Debouncer.debounce(this._resizeDebouncer,
+        //   timeOut.after(100),
+        //   () => {
+            this.gridResize();
+            // Remove folder without elements (starting from the end)
+            for (let i = this.itemsGridData.length - 1; i >= 0; i--){
+              if (this.itemsGridData[i].content){
+                if (this.itemsGridData[i].content.length == 0){
+                  this.itemsGridData.splice(i,1);
+                }
+              }
             }
-          }
-        }
 
-        this.levels.push(this.itemsGridData);
+            this.levels.push(this.itemsGridData);
+            
+            // console.log('_itemsGridDataChanged', this.levels[this.currentLevel].length, this.limitItemsPerLevel)
+            showNextButton = this.levels[this.currentLevel].length > this.limitItemsPerLevel;
+            if (showNextButton) {
+              this.levelIndexTo = this.levelIndexTo + this.limitItemsPerLevel - 1 - 1;
+            } else{
+              this.levelIndexTo = this.levels[this.currentLevel].length - 1;
+            }
+            this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo );
+            //   }
+            // );
         
-        // console.log('_itemsGridDataChanged', this.levels[this.currentLevel].length, this.limitItemsPerLevel)
-        showNextButton = this.levels[this.currentLevel].length > this.limitItemsPerLevel;
-        if (showNextButton) {
-          this.levelIndexTo = this.levelIndexTo + this.limitItemsPerLevel - 1 - 1;
-        } else{
-          this.levelIndexTo = this.levels[this.currentLevel].length - 1;
-        }
-        this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo );
       }
     }
 
