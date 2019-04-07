@@ -78,13 +78,12 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
           cursor: pointer;
         }
 
-        iron-list {
-          height: 100%;
-          width: 100%;
-          --iron-list-items-container: {
-            margin-left: var(--items-grid-margin-left);
-            margin-right: var(--items-grid-margin-right);
-          };
+
+        .items-container {
+          @apply --layout-horizontal;
+          @apply --layout-wrap;
+          margin-left: var(--items-grid-margin-left);
+          margin-right: var(--items-grid-margin-right);
         }
 
         .loading{
@@ -127,33 +126,30 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
           <li>[[currentLevelPageBreadcrumb]] / [[currentLevelTotalPages]]</li>
         </ul>
       </template>
-
-      <iron-list grid items="[[level]]" mutable-data>
-        <div id="loading" class="loading" hidden\$="[[!loading]]">
-          <div class="spinnerLoading">
-            <paper-spinner active></paper-spinner>
-          </div>
+      <div class="container">
+        <div class="items-container">
+          <template is="dom-repeat" items="[[level]]">
+          
+            <nc-items-grid-item 
+                id="slot[[item.code]]" 
+                language="{{language}}" 
+                item-data="[[item]]" 
+                item-width="[[itemWidth]]" 
+                item-height="[[itemHeight]]" 
+                item-margin="[[itemMargin]]" 
+                item-view-mode="[[itemViewMode]]" 
+                hide-item-name="[[hideItemName]]" 
+                on-item-selected="_itemSelected"
+                keep-item-selected="[[keepItemSelected]]" 
+                item-selected-id="[[itemSelectedId]]" 
+                on-parent-folder-selected="_parentFolderSelected" 
+                on-next-button-pressed="_nextButtonPressed" 
+                on-previous-button-pressed="_previousButtonPressed" 
+                on-folder-selected="_folderSelected">
+            </nc-items-grid-item>
+          </template>
         </div>
-        <template>
-          <nc-items-grid-item 
-              id="slot[[item.code]]" 
-              language="{{language}}" 
-              item-data="[[item]]" 
-              item-width="[[itemWidth]]" 
-              item-height="[[itemHeight]]" 
-              item-margin="[[itemMargin]]" 
-              item-view-mode="[[itemViewMode]]" 
-              hide-item-name="[[hideItemName]]" 
-              on-item-selected="_itemSelected"
-              keep-item-selected="[[keepItemSelected]]" 
-              item-selected-id="[[itemSelectedId]]" 
-              on-parent-folder-selected="_parentFolderSelected" 
-              on-next-button-pressed="_nextButtonPressed" 
-              on-previous-button-pressed="_previousButtonPressed" 
-              on-folder-selected="_folderSelected">
-          </nc-items-grid-item>
-        </template>
-      </iron-list>
+      </div>
     `;
   }
 
@@ -304,35 +300,41 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
 
   gridResize(){
     
+    let h = 0;
+    let cols = 0;
+    let rows = 0;
     if (this.isPaginated) {
       if ((this.offsetHeight !== 0) && (this.offsetHeight !== 0 )){
-        let h = this.offsetHeight;
+        h = this.offsetHeight;
         
-        let cols = Math.trunc(this.offsetWidth / (this.itemWidth + (this.itemMargin * 2) + 2)); /* 2: 1px left border + 1px right border */
+        cols = Math.trunc(this.offsetWidth / (this.itemWidth + (this.itemMargin * 2) + 2)); /* 2: 1px left border + 1px right border */
         
         if (this.breadcrumb){
           h = h - 28;
         }
         
-        let rows = Math.trunc(h / (this.itemHeight + (this.itemMargin * 2) + 2)); /* 2: 1px left border + 1px right border */
+        rows = Math.trunc(h / (this.itemHeight + (this.itemMargin * 2) + 2)); /* 2: 1px left border + 1px right border */
         this.limitItemsPerLevel = cols*rows;
       }
     } else {
       this.limitItemsPerLevel = 0;
     }
+    
+      let itemsGridMargin = 0;
+      let itemWidth = this.itemWidth + (this.itemMargin * 2) + 2;
 
-      
-    if(this.itemsGridCenter){
-      let itemsGridMargin = (this.offsetWidth - (this.itemsGridData.length * (this.itemWidth + (this.itemMargin * 2) + 2))) / 2;
+      console.log(this.offsetWidth, cols, itemWidth)
+
+      itemsGridMargin = (this.offsetWidth - (cols * itemWidth)) / 2;
+      console.log(itemsGridMargin)
       itemsGridMargin = itemsGridMargin + 'px';
-
       
 
       this.updateStyles({
         '--items-grid-margin-left': itemsGridMargin,
         '--items-grid-margin-right': itemsGridMargin
       });
-    }
+    
 
   }
 
@@ -373,9 +375,9 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
     if (this.itemsGridData) {
       if (this.itemsGridData.length > 0){
 
-        // this._resizeDebouncer = Debouncer.debounce(this._resizeDebouncer,
-        //   timeOut.after(100),
-        //   () => {
+        this._resizeDebouncer = Debouncer.debounce(this._resizeDebouncer,
+           timeOut.after(100),
+           () => {
             this.gridResize();
             // Remove folder without elements (starting from the end)
             for (let i = this.itemsGridData.length - 1; i >= 0; i--){
@@ -396,8 +398,8 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
               this.levelIndexTo = this.levels[this.currentLevel].length - 1;
             }
             this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo );
-            //   }
-            // );
+              }
+            );
         
       }
     }
@@ -447,7 +449,7 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
       }
     }
 
-    this.shadowRoot.querySelector('iron-list').fire('iron-resize');
+    //this.shadowRoot.querySelector('iron-list').fire('iron-resize');
     // this.shadowRoot.querySelector('iron-list').notifyResize();
   }
 

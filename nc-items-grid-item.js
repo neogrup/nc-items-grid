@@ -59,15 +59,17 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         }
 
         .next-button{
-          background-color: transparent;
           border-color: transparent;
-          box-shadow: none;
+          @apply --layout-horizontal;
+          @apply --layout-center-justified;
+          @apply --layout-center;
         }
 
         .previous-button{
-          background-color: transparent;
           border-color: transparent;
-          box-shadow: none;
+          @apply --layout-horizontal;
+          @apply --layout-center-justified;
+          @apply --layout-center;
         }
 
         .parent-folder{
@@ -183,10 +185,6 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
 
         paper-fab {
           --paper-fab-background: var(--app-secondary-color, #253855);
-          position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
         }
       </style>
 
