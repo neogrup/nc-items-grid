@@ -1,14 +1,20 @@
 {
   "en":{
     "ITEMS_GRID_BREADCRUMB_ALL": "All",
-    "ITEM_GRID_PARENT_FOLDER": "Back"
+    "ITEM_GRID_NEXT_FOLDER": "Next",
+    "ITEM_GRID_PARENT_FOLDER": "Back",
+    "ITEM_GRID_PREVIOUS_FOLDER": "Previous"
   },
   "es": {
     "ITEMS_GRID_BREADCRUMB_ALL": "Todos",
-    "ITEM_GRID_PARENT_FOLDER": "Volver"
+    "ITEM_GRID_NEXT_FOLDER": "Siguiente",
+    "ITEM_GRID_PARENT_FOLDER": "Volver",
+    "ITEM_GRID_PREVIOUS_FOLDER": "Anterior"
   },
   "ca":{
     "ITEMS_GRID_BREADCRUMB_ALL": "Tots",
-    "ITEM_GRID_PARENT_FOLDER": "Tornar"
+    "ITEM_GRID_NEXT_FOLDER": "Següent",
+    "ITEM_GRID_PARENT_FOLDER": "Tornar",
+    "ITEM_GRID_PREVIOUS_FOLDER": "Anterior"
   }
 }
