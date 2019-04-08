@@ -323,10 +323,7 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
       let itemsGridMargin = 0;
       let itemWidth = this.itemWidth + (this.itemMargin * 2) + 2;
 
-      console.log(this.offsetWidth, cols, itemWidth)
-
       itemsGridMargin = (this.offsetWidth - (cols * itemWidth)) / 2;
-      console.log(itemsGridMargin)
       itemsGridMargin = itemsGridMargin + 'px';
       
 
