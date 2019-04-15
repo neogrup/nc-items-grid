@@ -86,6 +86,10 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
           margin-right: var(--items-grid-margin-right);
         }
 
+        .justified {
+          @apply --layout-center-justified;
+        }
+
         .loading{
           position: absolute;
           width: 100%;
@@ -127,7 +131,7 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
         </ul>
       </template>
       <div class="container">
-        <div class="items-container">
+        <div class$="{{itemsContainerClassName}}">
           <template is="dom-repeat" items="[[level]]">
           
             <nc-items-grid-item 
@@ -270,6 +274,10 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
         type: Boolean,
         value: false
       },
+      isJustified: {
+        type: Boolean,
+        value: false
+      },
       itemsGridCenter: {
         type: Boolean,
         value: false
@@ -316,10 +324,7 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
         rows = Math.trunc(h / (this.itemHeight + (this.itemMargin * 2) + 2)); /* 2: 1px left border + 1px right border */
         this.limitItemsPerLevel = cols*rows;
       }
-    } else {
-      this.limitItemsPerLevel = 0;
-    }
-    
+
       let itemsGridMargin = 0;
       let itemWidth = this.itemWidth + (this.itemMargin * 2) + 2;
 
@@ -333,6 +338,10 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
       });
     
 
+
+    } else {
+      this.limitItemsPerLevel = 0;
+    }
   }
 
   _computeCurrentLevelPageBreadcrumb(currentLevelPage){
@@ -358,6 +367,11 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
   }
 
   _itemsGridDataChanged(e){  
+    this.itemsContainerClassName = 'items-container';
+    if (this.isJustified){
+      this.itemsContainerClassName = this.itemsContainerClassName + ' justified';
+    }
+
     this.currentLevel = 0;
     this.currentLevelPage = 0;
     this.levelIndexFrom = 0;
