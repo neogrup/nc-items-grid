@@ -60,6 +60,8 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
 
         .next-button{
           border-color: transparent;
+          background-color: transparent;
+          box-shadow: none;
           @apply --layout-horizontal;
           @apply --layout-center-justified;
           @apply --layout-center;
@@ -67,6 +69,8 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
 
         .previous-button{
           border-color: transparent;
+          background-color: transparent;
+          box-shadow: none;
           @apply --layout-horizontal;
           @apply --layout-center-justified;
           @apply --layout-center;

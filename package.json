@@ -10,7 +10,7 @@
     "url": "https://github.com/NEOGRUP/nc-items-grid"
   },
   "name": "@neogrup/nc-items-grid",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "resolutions": {
     "inherits": "2.0.3",
     "samsam": "1.1.3",
@@ -34,7 +34,7 @@
     "accounting-js": "^1.1.1"
   },
   "devDependencies": {
-    "@polymer/iron-demo-helpers": "^3.0.0-pre.19",
+    "@polymer/iron-demo-helpers": "^3.1.0",
     "@polymer/test-fixture": "^4.0.2",
     "@webcomponents/webcomponentsjs": "^2.0.0",
     "chai": "^4.2.0",
