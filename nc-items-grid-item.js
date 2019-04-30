@@ -32,7 +32,14 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         }
 
         :host([item-selected]) > div.item-container > div.default {
-          filter: brightness(80%);
+          /* filter: brightness(90%); */
+          /* filter: drop-shadow(1px 1px  var(--app-secondary-color, #253855)); */
+          /* box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
+                      0 1px 18px 0 rgba(0, 0, 0, 0.12),
+                      0 3px 5px -1px rgba(0, 0, 0, 0.4); */
+          background-color: var(--app-accent-color, #FF9800);
+          border-color: var(--app-accent-color, #FF9800);
+          box-shadow:inset 0px 0px 0px 2px var(--app-accent-color, #FF9800);
         }
 
 
@@ -77,11 +84,12 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         }
 
         .parent-folder{
-          border-color: var(--app-secondary-color, #253855);
-          background-color: var(--app-secondary-color, #253855);
-          overflow: hidden;
-          color: white;
-          font-size: 2.2em;
+          border-color: transparent;
+          background-color: transparent;
+          box-shadow: none;
+          @apply --layout-horizontal;
+          @apply --layout-center-justified;
+          @apply --layout-center
         }
 
         .folder{
@@ -147,6 +155,10 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           overflow: hidden;
         }
 
+        :host([item-selected]) > div.item-container > div.default > div.item-content-name {
+          background: #FF9800D9;
+        }
+
         .item-content-name {
           white-space:pre-wrap;
           vertical-align: middle;
@@ -156,10 +168,15 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           bottom: 0px;
           left: 0;
           right: 0;
-          background: linear-gradient(to bottom, rgba(37, 56, 85, 0.8) 100%, rgba(37, 56, 85, 0.8) 100%);
+          /* background: rgba(37, 56, 85, 0.8) 100%; */
+          background: #253855D9;
           color: white;
           overflow: hidden;
           padding: 5px 0;
+        }
+
+        :host([item-selected]) > div.item-container > div.default > div.item-content-name-center {
+          /* font-weight: bolder; */
         }
 
         .item-content-name-center {
@@ -187,28 +204,39 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           color :red;
         }
 
-        paper-fab {
-          --paper-fab-background: var(--app-secondary-color, #253855);
+        paper-fab.parent-folder-paper-fab {
+          --paper-fab-background: var(--app-accent-color, #FF9800);
+          --paper-fab-keyboard-focus-background: var(--app-accent-color, #FF9800);
         }
+
+        paper-fab.next-paper-fab {
+          --paper-fab-background: var(--app-secondary-color, #253855);
+          --paper-fab-keyboard-focus-background: var(--app-secondary-color, #253855);
+        }
+
+        paper-fab.previous-paper-fab {
+          --paper-fab-background: var(--app-secondary-color, #253855);
+          --paper-fab-keyboard-focus-background: var(--app-secondary-color, #253855);
+        }
+
       </style>
 
       <div class="item-container">
         <template is="dom-if" if="[[_checkType('parentFolder', itemData.type)]]">
           <div class="item-content parent-folder" on-tap="_selectItem">
-            <paper-ripple></paper-ripple>
-            <div class\$="{{itemContentNameClassName}}">{{localize('ITEM_GRID_PARENT_FOLDER')}}</div>
+            <paper-fab class="parent-folder-paper-fab" icon="chevron-left"></paper-fab>
           </div>
         </template>
 
         <template is="dom-if" if="[[_checkType('nextButton', itemData.type)]]">
           <div class="item-content next-button" on-tap="_selectItem">
-            <paper-fab icon="chevron-right"></paper-fab>
+            <paper-fab class="next-paper-fab" icon="chevron-right"></paper-fab>
           </div>
         </template>
 
         <template is="dom-if" if="[[_checkType('previousButton', itemData.type)]]">
           <div class="item-content previous-button" on-tap="_selectItem">
-            <paper-fab icon="chevron-left"></paper-fab>
+            <paper-fab class="previous-paper-fab" icon="chevron-left"></paper-fab>
           </div>
         </template>
 

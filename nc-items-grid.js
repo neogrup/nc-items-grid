@@ -282,6 +282,10 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
         type: Boolean,
         value: false
       },
+      firstItemSelected:{
+        type: Boolean,
+        value: false
+      },
       keepItemSelected:{
         type: Boolean,
         value: false
@@ -460,8 +464,12 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
       }
     }
 
-    //this.shadowRoot.querySelector('iron-list').fire('iron-resize');
-    // this.shadowRoot.querySelector('iron-list').notifyResize();
+    if ((this.firstItemSelected) && (!this.itemSelectedId)){
+      this.dispatchEvent(new CustomEvent('item-selected', {detail: this.level[0], bubbles: true, composed: true }));
+      this.selectItem(this.level[0].code);
+    }
+
+
   }
 
   _parentFolderSelected(){
