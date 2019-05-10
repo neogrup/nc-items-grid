@@ -83,7 +83,7 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
           @apply --layout-horizontal;
           @apply --layout-wrap;
           margin-left: var(--items-grid-margin-left);
-          margin-right: var(--items-grid-margin-right);
+          /* margin-right: var(--items-grid-margin-right); */
         }
 
         .justified {
@@ -327,21 +327,19 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
         
         rows = Math.trunc(h / (this.itemHeight + (this.itemMargin * 2) + 2)); /* 2: 1px left border + 1px right border */
         this.limitItemsPerLevel = cols*rows;
+
+        let itemsGridMargin = 0;
+        let itemWidth = this.itemWidth + (this.itemMargin * 2) + 2;
+
+        itemsGridMargin = (this.offsetWidth - (cols * itemWidth)) / 2;
+        itemsGridMargin = itemsGridMargin + 'px';
+        
+
+        this.updateStyles({
+          '--items-grid-margin-left': itemsGridMargin,
+          '--items-grid-margin-right': itemsGridMargin
+        });
       }
-
-      let itemsGridMargin = 0;
-      let itemWidth = this.itemWidth + (this.itemMargin * 2) + 2;
-
-      itemsGridMargin = (this.offsetWidth - (cols * itemWidth)) / 2;
-      itemsGridMargin = itemsGridMargin + 'px';
-      
-
-      this.updateStyles({
-        '--items-grid-margin-left': itemsGridMargin,
-        '--items-grid-margin-right': itemsGridMargin
-      });
-    
-
 
     } else {
       this.limitItemsPerLevel = 0;

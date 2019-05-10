@@ -168,8 +168,8 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           bottom: 0px;
           left: 0;
           right: 0;
-          /* background: rgba(37, 56, 85, 0.8) 100%; */
-          background: #253855D9;
+          background: rgba(37, 56, 85, 0.85);
+          /* background: #253855D9; */
           color: white;
           overflow: hidden;
           padding: 5px 0;
