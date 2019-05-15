@@ -29,6 +29,10 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           --item-content-footer-height: 20px;
 
           --item-margin: 2px;
+
+          --item-content-folder-font-size: 1.3em;
+          --item-content-default-font-size: 1em;
+          --item-content-default-price-font-size: 0.8em;
         }
 
         :host([item-selected]) > div.item-container > div.default {
@@ -89,7 +93,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           box-shadow: none;
           @apply --layout-horizontal;
           @apply --layout-center-justified;
-          @apply --layout-center
+          @apply --layout-center;
         }
 
         .folder{
@@ -101,7 +105,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           background-size: cover;
           overflow: hidden;
           color: white;
-          font-size: 1.5em;
+          font-size: var(--item-content-folder-font-size);
         }
 
         .default{
@@ -111,7 +115,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           background-position: center;
           background-repeat: no-repeat;
           background-size: cover;
-          
+          font-size: var(--item-content-default-font-size);
         }
 
 
@@ -156,11 +160,12 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         }
 
         :host([item-selected]) > div.item-container > div.default > div.item-content-name {
-          background: #FF9800D9;
+          background: rgba(255, 152, 0, 0.85);
+          /* background: #FF9800D9; */
         }
 
         .item-content-name {
-          white-space:pre-wrap;
+          white-space: pre-line;
           vertical-align: middle;
           width: 100%;
           text-align: center;
@@ -180,7 +185,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         }
 
         .item-content-name-center {
-          white-space:pre-wrap;
+          white-space: pre-line;
           vertical-align: middle;
           width: 100%;
           text-align: center;
@@ -194,10 +199,10 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         .product-price{
           float: right;
           width: fit-content;
-          background: linear-gradient(to bottom, rgba(0,0,0,0.5) 100%, rgba(0,0,0,0.5) 100%);
+          background: rgba(0,0,0,0.5);
           color: white;
           padding: 0 2px;
-          font-size: 0.8em;
+          font-size: var(--item-content-default-price-font-size);
         } 
 
         .required{
