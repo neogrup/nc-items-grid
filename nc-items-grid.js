@@ -38,6 +38,9 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
           --items-grid-margin-right: 0px;
           --items-grid-item-content-border-radius: 5px;
           --items-grid-item-content-box-shadow: none;
+          --items-grid-item-content-folder-font-size: 1.3em;
+          --items-grid-item-content-default-font-size: 1em;
+          --items-grid-item-content-default-price-font-size: 0.8em;
         }
 
         ul.breadcrumb {
@@ -118,6 +121,9 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
         nc-items-grid-item{
           --item-content-border-radius: var(--items-grid-item-content-border-radius);
           --item-content-box-shadow: var(--items-grid-item-content-box-shadow);
+          --item-content-folder-font-size: var(--items-grid-item-content-folder-font-size);
+          --item-content-default-font-size: var(--items-grid-item-content-default-font-size);
+          --item-content-default-price-font-size: var(--items-grid-item-content-default-price-font-size);
         }
       </style>
       
