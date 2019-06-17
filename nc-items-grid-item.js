@@ -43,8 +43,9 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
                       0 1px 18px 0 rgba(0, 0, 0, 0.12),
                       0 3px 5px -1px rgba(0, 0, 0, 0.4); */
           background-color: var(--app-accent-color, #FF9800);
-          border-color: var(--app-accent-color, #FF9800);
+          border-color: black;
           box-shadow:inset 0px 0px 0px 2px var(--app-accent-color, #FF9800);
+          font-weight: bolder;
         }
 
 
@@ -214,9 +215,10 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           min-width: 15px;
           width: fit-content;
           vertical-align: middle;
-          background: rgba(255, 152, 0, 0.9);
           padding: 2px;
           border-radius: 25%;
+          border: 2px solid white;
+          background: var(--app-accent-color, #FF9800);
           font-size: var(--item-content-default-used-qty-font-size);
           font-weight: bolder;
           z-index: 3;
