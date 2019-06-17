@@ -38,6 +38,9 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
           --items-grid-margin-right: 0px;
           --items-grid-item-content-border-radius: 5px;
           --items-grid-item-content-box-shadow: none;
+          --items-grid-item-content-folder-font-size: 1.3em;
+          --items-grid-item-content-default-font-size: 1em;
+          --items-grid-item-content-default-price-font-size: 1em;
         }
 
         ul.breadcrumb {
@@ -118,6 +121,9 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
         nc-items-grid-item{
           --item-content-border-radius: var(--items-grid-item-content-border-radius);
           --item-content-box-shadow: var(--items-grid-item-content-box-shadow);
+          --item-content-folder-font-size: var(--items-grid-item-content-folder-font-size);
+          --item-content-default-font-size: var(--items-grid-item-content-default-font-size);
+          --item-content-default-price-font-size: var(--items-grid-item-content-default-price-font-size);
         }
       </style>
       
@@ -303,15 +309,12 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
 
   connectedCallback() {
     super.connectedCallback();
-    
     window.addEventListener('resize', this._appResize.bind(this));
-
     this.useKeyIfMissing = true;
     this.loadResources(this.resolveUrl('./static/translations.json'));
   }
 
   gridResize(){
-    
     let h = 0;
     let cols = 0;
     let rows = 0;
@@ -389,8 +392,8 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
       if (this.itemsGridData.length > 0){
 
         this._resizeDebouncer = Debouncer.debounce(this._resizeDebouncer,
-           timeOut.after(100),
-           () => {
+          timeOut.after(100),
+          () => {
             this.gridResize();
             // Remove folder without elements (starting from the end)
             for (let i = this.itemsGridData.length - 1; i >= 0; i--){
@@ -411,8 +414,8 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
               this.levelIndexTo = this.levels[this.currentLevel].length - 1;
             }
             this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo );
-              }
-            );
+          }
+        );
         
       }
     }
@@ -451,7 +454,6 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
       this.set('level', this.levels[this.currentLevel]);
     }
 
-
     if (_showParent) {
       if (this.level[0]){
         if (this.level[0].type != 'parentFolder'){
@@ -466,12 +468,9 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
       this.dispatchEvent(new CustomEvent('item-selected', {detail: this.level[0], bubbles: true, composed: true }));
       this.selectItem(this.level[0].code);
     }
-
-
   }
 
   _parentFolderSelected(){
-    // console.log('_parentFolderSelected')
     this.currentLevel--;
     this.currentLevelPage = 0;
     this.levelIndexFrom = 0;

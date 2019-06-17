@@ -24,11 +24,16 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           --item-content-border-radius: 5px;
           --item-content-box-shadow: none;
 
-          --item-content-header-height: 20px;
-          --item-content-image-height: 80px;
-          --item-content-footer-height: 20px;
+          --item-content-kiosk-header-height: 20px;
+          --item-content-kiosk-image-height: 80px;
+          --item-content-kiosk-footer-height: 20px;
 
           --item-margin: 2px;
+
+          --item-content-folder-font-size: 1.3em;
+          --item-content-default-font-size: 1em;
+          --item-content-default-price-font-size: 1em;
+          --item-content-default-used-qty-font-size: 1.1em;
         }
 
         :host([item-selected]) > div.item-container > div.default {
@@ -89,7 +94,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           box-shadow: none;
           @apply --layout-horizontal;
           @apply --layout-center-justified;
-          @apply --layout-center
+          @apply --layout-center;
         }
 
         .folder{
@@ -101,7 +106,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           background-size: cover;
           overflow: hidden;
           color: white;
-          font-size: 1.5em;
+          font-size: var(--item-content-folder-font-size);
         }
 
         .default{
@@ -111,12 +116,12 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           background-position: center;
           background-repeat: no-repeat;
           background-size: cover;
-          
+          font-size: var(--item-content-default-font-size);
         }
 
 
-        .item-content-header{
-          height: var(--item-content-header-height);
+        .item-content-kiosk-header{
+          height: var(--item-content-kiosk-header-height);
           background: #FFA726;
           @apply --layout-horizontal;
           @apply --layout-center-justified;
@@ -124,7 +129,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           padding: 0 10px;
         }
 
-        .item-content-header-price{
+        .item-content-kiosk-header-price{
           /* @apply --layout-flex; */
           /* text-align: right; */
           font-size: 1.5em;
@@ -134,12 +139,12 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           color: black;
         }
 
-        .item-content-image{
-          height: var(--item-content-image-height);
+        .item-content-kiosk-image{
+          height: var(--item-content-kiosk-image-height);
         }
 
-        .item-content-footer{
-          height: var(--item-content-footer-height);
+        .item-content-kiosk-footer{
+          height: var(--item-content-kiosk-footer-height);
           background-color: #FFA726;
           @apply --layout-horizontal;
           @apply --layout-center-justified;
@@ -148,7 +153,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           padding: 0 10px;
         }
 
-        .item-content-footer-name{
+        .item-content-kiosk-footer-name{
           font-size: 1.3em;
           color: white;
           color: black;
@@ -156,16 +161,17 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         }
 
         :host([item-selected]) > div.item-container > div.default > div.item-content-name {
-          background: #FF9800D9;
+          background: rgba(255, 152, 0, 0.85);
+          /* background: #FF9800D9; */
         }
 
         .item-content-name {
-          white-space:pre-wrap;
+          white-space: pre-line;
           vertical-align: middle;
           width: 100%;
           text-align: center;
           position: absolute;
-          bottom: 0px;
+          bottom: 0;
           left: 0;
           right: 0;
           background: rgba(37, 56, 85, 0.85);
@@ -173,6 +179,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           color: white;
           overflow: hidden;
           padding: 5px 0;
+          z-index: 1;
         }
 
         :host([item-selected]) > div.item-container > div.default > div.item-content-name-center {
@@ -180,7 +187,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         }
 
         .item-content-name-center {
-          white-space:pre-wrap;
+          white-space: pre-line;
           vertical-align: middle;
           width: 100%;
           text-align: center;
@@ -189,16 +196,54 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           transform: translate(0,-50%);
           overflow: hidden;
           padding: 5px 0;
+          z-index: 1;
         }
         
-        .product-price{
-          float: right;
+
+        .item-content-header{
+          @apply --layout-horizontal;
+        }
+        
+        .item-content-header-used-qty{
+          position: absolute;
+          left:0;
+          right:0;
+          margin-left:auto;
+          margin-right:auto;
+          text-align: center;
+          min-width: 15px;
           width: fit-content;
-          background: linear-gradient(to bottom, rgba(0,0,0,0.5) 100%, rgba(0,0,0,0.5) 100%);
+          vertical-align: middle;
+          background: rgba(255, 152, 0, 0.9);
+          padding: 2px;
+          border-radius: 25%;
+          font-size: var(--item-content-default-used-qty-font-size);
+          font-weight: bolder;
+          z-index: 3;
+        }
+        
+        .item-content-header-used-qty:empty{
+          background: transparent;
+        }
+
+        .item-content-header-price{
+          position: absolute;
+          top: 0;
+          right: 0;
+          text-align: center;
+          min-width: 15px;
+          width: fit-content;
+          vertical-align: middle;
+          background: rgba(37, 56, 85, 0.9);
           color: white;
-          padding: 0 2px;
-          font-size: 0.8em;
+          padding: 2px;
+          border-radius: 25%;
+          font-size: var(--item-content-default-price-font-size);
+          z-index: 2;
         } 
+        .item-content-header-price:empty{
+          background: transparent;
+        }
 
         .required{
           color :red;
@@ -251,8 +296,9 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           <template is="dom-if" if="[[_checkViewMode('default')]]">
             <div class="item-content default" on-tap="_selectItem">
               <paper-ripple></paper-ripple>
-              <div class="product-price">
-                [[itemData.price]]
+              <div class="item-content-header">
+                <div class="item-content-header-used-qty" hidden$="{{hideUsedQty}}">[[itemData.usedQty]]</div>
+                <div class="item-content-header-price">[[itemData.price]]</div>
               </div>
               <div class\$="{{itemContentNameClassName}}" hidden\$="[[hideItemName]]">[[itemData.name]]</div>
             </div>
@@ -261,12 +307,12 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           <template is="dom-if" if="[[_checkViewMode('kiosk')]]">
             <div class="item-content" on-tap="_selectItem">
               <paper-ripple></paper-ripple>
-              <div class="item-content-header">
-                <div class="item-content-header-price">[[_formatPrice(itemData.price)]]</div>
+              <div class="item-content-kiosk-header">
+                <div class="item-content-kiosk-header-price">[[_formatPrice(itemData.price)]]</div>
               </div>
-              <div class="item-content-image default"></div>
-              <div class="item-content-footer">
-                <div class="item-content-footer-name">
+              <div class="item-content-kiosk-image default"></div>
+              <div class="item-content-kiosk-footer">
+                <div class="item-content-kiosk-footer-name">
                   [[itemData.name]]
                 </div>
               </div>
@@ -318,6 +364,10 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         type: Boolean,
         value: false,
         reflectToAttribute: true
+      },
+      hideUsedQty: {
+        type: Boolean,
+        value: true
       }
     }
   }
@@ -335,6 +385,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
   _itemDataChanged(){
     let itemContentBackgroundColor = 'transparent';
     let itemContentBackgroundImage = 'none';
+    this.hideUsedQty = true;
 
     switch (this.itemData.type) {
       case "folder":
@@ -378,18 +429,20 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         break;
     }
 
-    if (this.itemHeight > this.itemWidth){
-      let diffHeight = this.itemHeight - this.itemWidth
+    if (this.itemViewMode === 'kiosk') {    
+      if (this.itemHeight > this.itemWidth){
+        let diffHeight = this.itemHeight - this.itemWidth
 
-      let itemContentHeaderHeight =  diffHeight * 0.5; 
-      let itemContentImageHeight = this.itemWidth;
-      let itemContentFooterHeight = diffHeight * 0.5;
+        let itemContentKioskHeaderHeight =  diffHeight * 0.5; 
+        let itemContentKioskImageHeight = this.itemWidth;
+        let itemContentKioskFooterHeight = diffHeight * 0.5;
 
-      this.updateStyles({
-        '--item-content-header-height': itemContentHeaderHeight + 'px',
-        '--item-content-image-height': itemContentImageHeight + 'px',
-        '--item-content-footer-height': itemContentFooterHeight + 'px'
-      });
+        this.updateStyles({
+          '--item-content-kiosk-header-height': itemContentKioskHeaderHeight + 'px',
+          '--item-content-kiosk-image-height': itemContentKioskImageHeight + 'px',
+          '--item-content-kiosk-footer-height': itemContentKioskFooterHeight + 'px'
+        });
+      }
     }
 
     this.updateStyles({
@@ -406,6 +459,10 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
       } else {
         this.itemSelected = false;  
       }
+    }
+
+    if (this.itemData.usedQty > 0){
+      this.hideUsedQty = false;
     }
   }
 
