@@ -268,27 +268,27 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
 
       </style>
 
-      <div class="item-container">
+      <div class="item-container" on-click="_selectItem">
         <template is="dom-if" if="[[_checkType('parentFolder', itemData.type)]]">
-          <div class="item-content parent-folder" on-tap="_selectItem">
+          <div class="item-content parent-folder" >
             <paper-fab class="parent-folder-paper-fab" icon="chevron-left"></paper-fab>
           </div>
         </template>
 
         <template is="dom-if" if="[[_checkType('nextButton', itemData.type)]]">
-          <div class="item-content next-button" on-tap="_selectItem">
+          <div class="item-content next-button">
             <paper-fab class="next-paper-fab" icon="chevron-right"></paper-fab>
           </div>
         </template>
 
         <template is="dom-if" if="[[_checkType('previousButton', itemData.type)]]">
-          <div class="item-content previous-button" on-tap="_selectItem">
+          <div class="item-content previous-button">
             <paper-fab class="previous-paper-fab" icon="chevron-left"></paper-fab>
           </div>
         </template>
 
         <template is="dom-if" if="[[_checkType('folder', itemData.type)]]">
-          <div class="item-content folder" on-tap="_selectItem">
+          <div class="item-content folder">
             <paper-ripple></paper-ripple>
             <div class\$="{{itemContentNameClassName}}">[[itemData.name]]</div>
           </div>
@@ -296,7 +296,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
 
         <template is="dom-if" if="[[_checkType('default', itemData.type)]]">
           <template is="dom-if" if="[[_checkViewMode('default')]]">
-            <div class="item-content default" on-tap="_selectItem">
+            <div class="item-content default">
               <paper-ripple></paper-ripple>
               <div class="item-content-header">
                 <div class="item-content-header-used-qty" hidden$="{{hideUsedQty}}">[[itemData.usedQty]]</div>
@@ -307,7 +307,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           </template>
 
           <template is="dom-if" if="[[_checkViewMode('kiosk')]]">
-            <div class="item-content" on-tap="_selectItem">
+            <div class="item-content">
               <paper-ripple></paper-ripple>
               <div class="item-content-kiosk-header">
                 <div class="item-content-kiosk-header-price">[[_formatPrice(itemData.price)]]</div>
