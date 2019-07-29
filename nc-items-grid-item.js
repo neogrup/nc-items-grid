@@ -289,7 +289,9 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
 
         <template is="dom-if" if="[[_checkType('folder', itemData.type)]]">
           <div class="item-content folder">
-            <paper-ripple></paper-ripple>
+            <template is="dom-if" if="[[animations]]">
+              <paper-ripple></paper-ripple>
+            </template>
             <div class\$="{{itemContentNameClassName}}">[[itemData.name]]</div>
           </div>
         </template>
@@ -297,7 +299,9 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         <template is="dom-if" if="[[_checkType('default', itemData.type)]]">
           <template is="dom-if" if="[[_checkViewMode('default')]]">
             <div class="item-content default">
-              <paper-ripple></paper-ripple>
+              <template is="dom-if" if="[[animations]]">
+                <paper-ripple></paper-ripple>
+              </template>
               <div class="item-content-header">
                 <div class="item-content-header-used-qty" hidden$="{{hideUsedQty}}">[[itemData.usedQty]]</div>
                 <div class="item-content-header-price" hidden$="{{hidePrice}}">[[itemData.price]]</div>
@@ -308,7 +312,9 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
 
           <template is="dom-if" if="[[_checkViewMode('kiosk')]]">
             <div class="item-content">
-              <paper-ripple></paper-ripple>
+              <template is="dom-if" if="[[animations]]">
+                <paper-ripple></paper-ripple>
+              </template>
               <div class="item-content-kiosk-header">
                 <div class="item-content-kiosk-header-price">[[_formatPrice(itemData.price)]]</div>
               </div>
@@ -327,6 +333,10 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
 
   static get properties() {
     return {
+      animations:{
+        type: Boolean,
+        value: true
+      },
       language: String,
       hideItemName:{
         type: Boolean,
