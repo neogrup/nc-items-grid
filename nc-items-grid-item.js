@@ -140,6 +140,27 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           color: black;
         }
 
+        .item-content-kiosk-header-used-qty{
+          position: absolute;
+          right: 0;
+          margin-right: 5px;
+          text-align: center;
+          min-width: 15px;
+          width: fit-content;
+          vertical-align: middle;
+          padding: 2px;
+          border-radius: 25%;
+          border: 2px solid black;
+          background: white;
+          font-size: 1.5em;
+          font-weight: bolder;
+          z-index: 3;
+        }
+        
+        .item-content-kiosk-header-used-qty:empty{
+          background: transparent;
+        }
+
         .item-content-kiosk-image{
           height: var(--item-content-kiosk-image-height);
         }
@@ -317,6 +338,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
               </template>
               <div class="item-content-kiosk-header">
                 <div class="item-content-kiosk-header-price">[[_formatPrice(itemData.price)]]</div>
+                <div class="item-content-kiosk-header-used-qty" hidden$="{{hideUsedQty}}">[[itemData.usedQty]]</div>
               </div>
               <div class="item-content-kiosk-image default"></div>
               <div class="item-content-kiosk-footer">
@@ -513,7 +535,9 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
 
   _formatPrice(price) {
     let priceText = ""
-    priceText = formatMoney(price, {symbol: "€", precision: 2, thousand: ".", decimal: ",", format: "%v %s"});
+    if (price){
+      priceText = formatMoney(price, {symbol: "€", precision: 2, thousand: ".", decimal: ",", format: "%v %s"});
+    }
     return priceText;
   }
 
