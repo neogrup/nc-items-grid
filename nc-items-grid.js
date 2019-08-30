@@ -309,6 +309,10 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
       hidePrice: {
         type: Boolean,
         value: false
+      },
+      keyboardShowed: {
+        type: Boolean,
+        value: false
       }
     }
   }
@@ -320,6 +324,8 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
   connectedCallback() {
     super.connectedCallback();
     window.addEventListener('resize', this._appResize.bind(this));
+    window.addEventListener('inputFocus', this._inputFocus.bind(this));
+    window.addEventListener('inputBlur', this._inputBlur.bind(this));
     this.useKeyIfMissing = true;
     this.loadResources(this.resolveUrl('./static/translations.json'));
   }
@@ -633,7 +639,22 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
   }
 
   _appResize(){
-    this._itemsGridDataChanged();
+    if ((typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1)){
+      if (!this.keyboardShowed){
+        this._itemsGridDataChanged();  
+      }
+    } else{
+      this._itemsGridDataChanged();
+    }
+  }
+
+  _inputFocus(){
+    this.keyboardShowed = true;
+
+  }
+
+  _inputBlur(){
+    this.keyboardShowed = false;
   }
 }
 window.customElements.define('nc-items-grid', NcItemsGrid);
