@@ -425,6 +425,15 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
     let itemContentBackgroundImage = 'none';
     this.hideUsedQty = true;
 
+
+    this.updateStyles({
+      '--item-content-background-color':   itemContentBackgroundColor,
+      '--item-content-background-image': itemContentBackgroundImage,
+      '--item-content-width': this.itemWidth + 'px',
+      '--item-content-height': this.itemHeight + 'px',
+      '--item-margin': this.itemMargin + 'px'
+    });
+
     switch (this.itemData.type) {
       case "folder":
         if (this.itemData.urlImage){

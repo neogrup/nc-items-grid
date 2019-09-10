@@ -138,7 +138,7 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
       </template>
       <div class="container">
         <div class$="{{itemsContainerClassName}}">
-          <template is="dom-repeat" items="[[level]]">
+          <template is="dom-repeat" items="[[level]]" mutable-data>
           
             <nc-items-grid-item 
                 id="slot[[item.code]]" 
@@ -326,8 +326,15 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
     window.addEventListener('resize', this._appResize.bind(this));
     window.addEventListener('inputFocus', this._inputFocus.bind(this));
     window.addEventListener('inputBlur', this._inputBlur.bind(this));
+    window.addEventListener('visibilitychange', this._appVisibilityChange.bind(this));
     this.useKeyIfMissing = true;
     this.loadResources(this.resolveUrl('./static/translations.json'));
+  }
+
+  _appVisibilityChange(e){
+    if (document.visibilityState == 'visible') {
+      this._appResize();
+    }
   }
 
   gridResize(){
@@ -397,7 +404,7 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
     this.currentLevelPage = 0;
     this.levelIndexFrom = 0;
     this.levelIndexTo = 0;
-    this.set('level',[]);
+    // this.set('level',[]);
     this.set('levels', []);
 
     let showNextButton = false;
