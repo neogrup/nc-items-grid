@@ -437,28 +437,29 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
               this.levelIndexTo = this.levels[this.currentLevel].length - 1;
             }
             this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo );
+            if (this.breadcrumbList){
+              this.push ('breadcrumbList', {
+                level: 0,
+                name: this.localize('ITEMS_GRID_BREADCRUMB_ALL')
+              });
+            }
+        
+            if (this.autoFlow) {
+              if (this.currentLevel==0) {
+                if (this.level.length == 1) {
+                  if (this.level[0].type == "folder") {
+                    this._folderSelected({detail:this.level[0]});
+                  }
+                }
+              }
+            }
           }
         );
         
       }
     }
 
-    if (this.breadcrumbList){
-      this.push ('breadcrumbList', {
-        level: 0,
-        name: this.localize('ITEMS_GRID_BREADCRUMB_ALL')
-      });
-    }
-
-    if (this.autoFlow) {
-      if (this.currentLevel==0) {
-        if (this.level.length == 1) {
-          if (this.level[0].type == "folder") {
-            this._folderSelected({detail:this.level[0]});
-          }
-        }
-      }
-    }
+    
   }
 
   _setPage(_showPrevious, _showParent, _showNext, _from, _to) {
@@ -642,6 +643,16 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
 
     for (let i=this.currentLevelPage; i>0; i--) {
       this._previousButtonPressed();
+    }
+
+    if (this.autoFlow) {
+      if (this.currentLevel==0) {
+        if (this.level.length == 1) {
+          if (this.level[0].type == "folder") {
+            this._folderSelected({detail:this.level[0]});
+          }
+        }
+      }
     }
   }
 
