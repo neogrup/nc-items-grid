@@ -382,9 +382,9 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
         if (this.limitItemsPerLevel != 0)
 
           if (this.levels[this.currentLevel].length % (this.limitItemsPerLevel - 2) > 1) {
-            this.currentLevelTotalPages = Math.trunc(this.levels[this.currentLevel].length / (this.limitItemsPerLevel - 2)) + 1;
+            this.currentLevelTotalPages = Math.trunc(this.levels[this.currentLevel].length / (this.limitItemsPerLevel - 2)) + 1; 
           } else {
-            this.currentLevelTotalPages = Math.trunc(this.levels[this.currentLevel].length / (this.limitItemsPerLevel - 2));
+            this.currentLevelTotalPages = Math.trunc(this.levels[this.currentLevel].length / (this.limitItemsPerLevel - 2)); 
           }
           if (this.currentLevelTotalPages == 0 )
             this.currentLevelTotalPages = 1;
@@ -404,7 +404,6 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
     this.currentLevelPage = 0;
     this.levelIndexFrom = 0;
     this.levelIndexTo = 0;
-    // this.set('level',[]);
     this.set('levels', []);
 
     let showNextButton = false;
@@ -412,16 +411,16 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
     let showPreviousButton = false;
 
     if (this.itemsGridData) {
-      if (this.itemsGridData.length > 0){
+      if (this.itemsGridData.length > 0){ 
 
         this._resizeDebouncer = Debouncer.debounce(this._resizeDebouncer,
           timeOut.after(100),
           () => {
             this.gridResize();
             // Remove folder without elements (starting from the end)
-            for (let i = this.itemsGridData.length - 1; i >= 0; i--){
+            for (let i = this.itemsGridData.length - 1; i >= 0; i--){ 
               if (this.itemsGridData[i].content){
-                if (this.itemsGridData[i].content.length == 0){
+                if (this.itemsGridData[i].content.length == 0){ 
                   this.itemsGridData.splice(i,1);
                 }
               }
@@ -430,27 +429,23 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
             this.levels.push(this.itemsGridData);
             
             // console.log('_itemsGridDataChanged', this.levels[this.currentLevel].length, this.limitItemsPerLevel)
-            showNextButton = this.levels[this.currentLevel].length > this.limitItemsPerLevel;
-            if (showNextButton) {
-              this.levelIndexTo = this.levelIndexTo + this.limitItemsPerLevel - 1 - 1;
-            } else{
-              this.levelIndexTo = this.levels[this.currentLevel].length - 1;
-            }
-            this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo );
-            if (this.breadcrumbList){
-              this.push ('breadcrumbList', {
-                level: 0,
-                name: this.localize('ITEMS_GRID_BREADCRUMB_ALL')
-              });
-            }
-        
-            if (this.autoFlow) {
-              if (this.currentLevel==0) {
-                if (this.level.length == 1) {
-                  if (this.level[0].type == "folder") {
-                    this._folderSelected({detail:this.level[0]});
-                  }
-                }
+            if (this.levels){
+              showNextButton = this.levels[this.currentLevel].length > this.limitItemsPerLevel; 
+              if (showNextButton) {
+                this.levelIndexTo = this.levelIndexTo + this.limitItemsPerLevel - 1 - 1;
+              } else{
+                this.levelIndexTo = this.levels[this.currentLevel].length - 1;
+              }
+              this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo );
+              if (this.breadcrumbList){
+                this.push ('breadcrumbList', {
+                  level: 0,
+                  name: this.localize('ITEMS_GRID_BREADCRUMB_ALL')
+                });
+              }
+          
+              if (this.autoFlow) {
+                this._autoFlow();
               }
             }
           }
@@ -507,27 +502,26 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
     if (this.currentLevel > 0){
       showParentFolder = true;
     }
-    showNextButton = this.levels[this.currentLevel].length -1 > this.limitItemsPerLevel;
 
-    if (showNextButton){
-      this.levelIndexTo = this.levelIndexFrom + this.limitItemsPerLevel - 1 - 1;
-      if (this.currentLevel > 0) { 
-        this.levelIndexTo = this.levelIndexTo - 1;
-      }
-    } else {
-      this.levelIndexTo = this.levels[this.currentLevel].length - 1;
-    }
+    if (this.levels){
+      if (this.levels[this.currentLevel]){
+        showNextButton = this.levels[this.currentLevel].length -1 > this.limitItemsPerLevel; 
 
-    this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo );
-
-    this.pop('breadcrumbList');
-
-    if (this.autoFlow) {
-      if (this.level.length <= 2) { //parent folder & and the folder itself
-        if (this.level[0].type == "parentFolder") {
-          if (this.level[1].type == "folder") {
-            this._parentFolderSelected();
+        if (showNextButton){
+          this.levelIndexTo = this.levelIndexFrom + this.limitItemsPerLevel - 1 - 1;
+          if (this.currentLevel > 0) { 
+            this.levelIndexTo = this.levelIndexTo - 1;
           }
+        } else {
+          this.levelIndexTo = this.levels[this.currentLevel].length - 1; 
+        }
+    
+        this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo );
+    
+        this.pop('breadcrumbList');
+    
+        if (this.autoFlow) {
+          this._autoFlow('parentFolderSelected');
         }
       }
     }
@@ -540,14 +534,19 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
     let showParentFolder = false;
     let showPreviousButton = true;
 
-    if ( this.levels[this.currentLevel].length - this.levelIndexFrom <= this.limitItemsPerLevel - 1){ //-1 del previous //ulyima página
-      this.levelIndexTo = this.levels[this.currentLevel].length - 1;
-    } else { //necesario next
-      this.levelIndexTo = this.levelIndexFrom + this.limitItemsPerLevel - 1 - 1 - 1; //-1 previous -1 next -1 0based
-      showNextButton = true;
-    }
 
-    this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo );
+    if (this.levels){
+      if (this.levels[this.currentLevel]){
+        if ( this.levels[this.currentLevel].length - this.levelIndexFrom <= this.limitItemsPerLevel - 1){ //-1 del previous //ulyima página 
+          this.levelIndexTo = this.levels[this.currentLevel].length - 1;
+        } else { //necesario next
+          this.levelIndexTo = this.levelIndexFrom + this.limitItemsPerLevel - 1 - 1 - 1; //-1 previous -1 next -1 0based
+          showNextButton = true;
+        }
+
+        this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo );
+      }
+    }
   }
 
   _previousButtonPressed(){
@@ -588,40 +587,43 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
     this.currentLevelPage = 0;
 
     this.levelIndexFrom = 0;
-    this.levels.push(item.detail.content);
 
-    // Remove folder without elements (starting from the end)
-    for (let i = item.detail.content.length - 1; i >= 0; i--){
-      if (item.detail.content[i].content){
-        if (item.detail.content[i].content.length == 0){
-          item.detail.content.splice(i,1);
+    if  (item.detail.content){ 
+      this.levels.push(item.detail.content);
+
+      // Remove folder without elements (starting from the end)
+      for (let i = item.detail.content.length - 1; i >= 0; i--){ 
+        if (item.detail.content[i].content){
+          if (item.detail.content[i].content.length == 0){
+            item.detail.content.splice(i,1);
+          }
         }
       }
-    }
 
-    let showParentFolder = true;
-    let showPreviousButton = false;
-    let showNextButton = this.levels[this.currentLevel].length > this.limitItemsPerLevel - 1;
+      let showParentFolder = true;
+      let showPreviousButton = false;
+      let showNextButton = this.levels[this.currentLevel].length > this.limitItemsPerLevel - 1;
 
-    if (showNextButton) {
-      this.levelIndexTo = this.limitItemsPerLevel - 1 - 1 - 1; //-1 de 0 based -1 parent folder -1 next
-    } else {
-      this.levelIndexTo = this.levels[this.currentLevel].length - 1;
-    }
+      if (this.levels){
+        if (this.levels[this.currentLevel]){
+          if (showNextButton) {
+            this.levelIndexTo = this.limitItemsPerLevel - 1 - 1 - 1; //-1 de 0 based -1 parent folder -1 next
+          } else {
+            this.levelIndexTo = this.levels[this.currentLevel].length - 1; 
+          }
 
-    this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo);
+          this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo);
 
-    if (this.breadcrumbList) {
-      this.push('breadcrumbList', {
-        level: this.currentLevel,
-        name: item.detail.name
-      });
-    }
+          if (this.breadcrumbList) {
+            this.push('breadcrumbList', {
+              level: this.currentLevel,
+              name: item.detail.name
+            });
+          }
 
-    if (this.autoFlow) {
-      if (this.level.length == 2) { //parent folder and the folder itself
-        if (this.level[1].type == "folder") { // 1 'cause 0 is parent
-          this._folderSelected({detail:this.level[1]});
+          if (this.autoFlow) {
+            this._autoFlow('folderSelected')
+          }
         }
       }
     }
@@ -646,13 +648,7 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
     }
 
     if (this.autoFlow) {
-      if (this.currentLevel==0) {
-        if (this.level.length == 1) {
-          if (this.level[0].type == "folder") {
-            this._folderSelected({detail:this.level[0]});
-          }
-        }
-      }
+      this._autoFlow();
     }
   }
 
@@ -673,6 +669,40 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
 
   _inputBlur(){
     this.keyboardShowed = false;
+  }
+
+  _autoFlow(type){
+    if (this.level){
+      switch (type) {
+        case 'parentFolderSelected':
+          if (this.level.length <= 2) { //parent folder & and the folder itself 
+            if (this.level[0].type == "parentFolder") {
+              if (this.level[1].type == "folder") {
+              this._parentFolderSelected();
+              }
+            }
+          }
+          break;
+
+        case 'folderSelected':
+          if (this.level.length == 2) { 
+            if (this.level[1].type == "folder") { // 1 'cause 0 is parent
+              this._folderSelected({detail:this.level[1]});
+            }
+          }
+          break;
+
+        default:
+          if (this.currentLevel==0) {
+            if (this.level.length == 1) { 
+              if (this.level[0].type == "folder") { 
+              this._folderSelected({detail:this.level[0]});
+              }
+            }
+          }
+          break;
+      }
+    }
   }
 }
 window.customElements.define('nc-items-grid', NcItemsGrid);
