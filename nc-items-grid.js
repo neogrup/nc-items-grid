@@ -313,6 +313,10 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
       keyboardShowed: {
         type: Boolean,
         value: false
+      },
+      debounceTime: {
+        type: Number,
+        value: 0
       }
     }
   }
@@ -414,7 +418,7 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
       if (this.itemsGridData.length > 0){ 
 
         this._resizeDebouncer = Debouncer.debounce(this._resizeDebouncer,
-          timeOut.after(100),
+          timeOut.after(this.debounceTime),
           () => {
             this.gridResize();
             // Remove folder without elements (starting from the end)
@@ -428,7 +432,6 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
 
             this.levels.push(this.itemsGridData);
             
-            // console.log('_itemsGridDataChanged', this.levels[this.currentLevel].length, this.limitItemsPerLevel)
             if (this.levels){
               showNextButton = this.levels[this.currentLevel].length > this.limitItemsPerLevel; 
               if (showNextButton) {
@@ -582,12 +585,10 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
   }
 
   _folderSelected(item) {
-    // console.log('_folderSelected')
     this.currentLevel++;
     this.currentLevelPage = 0;
-
     this.levelIndexFrom = 0;
-
+    
     if  (item.detail.content){ 
       this.levels.push(item.detail.content);
 
@@ -601,7 +602,7 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
       }
 
       let showParentFolder = true;
-      let showPreviousButton = false;
+      let showPreviousButton = false;   
       let showNextButton = this.levels[this.currentLevel].length > this.limitItemsPerLevel - 1;
 
       if (this.levels){
@@ -639,17 +640,7 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
   }
 
   selectTopFolder(){
-    for (let i=this.currentLevel; i>0; i--) {
-      this._parentFolderSelected();
-    }
-
-    for (let i=this.currentLevelPage; i>0; i--) {
-      this._previousButtonPressed();
-    }
-
-    if (this.autoFlow) {
-      this._autoFlow();
-    }
+    this._itemsGridDataChanged();
   }
 
   _appResize(){
@@ -686,7 +677,7 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
 
         case 'folderSelected':
           if (this.level.length == 2) { 
-            if (this.level[1].type == "folder") { // 1 'cause 0 is parent
+            if (this.level[1].type == "folder") { // 1 because 0 is parentFolder
               this._folderSelected({detail:this.level[1]});
             }
           }
