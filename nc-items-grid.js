@@ -91,7 +91,7 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
 
         .justified {
           @apply --layout-center-justified;
-          margin-left: 0px
+          margin-left: 0px;
         }
 
         .loading{
