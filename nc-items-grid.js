@@ -223,6 +223,10 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
         type: Number,
         value: 0
       },
+      levelsIndexes: {
+        type: Array,
+        value: []
+      },
       currentLevelPage: {
         type: Number,
         value: 0
@@ -410,7 +414,8 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
     this.levelIndexFrom = 0;
     this.levelIndexTo = 0;
     this.set('levels', []);
-
+    this.set('levelsIndexes', []);
+    
     let showNextButton = false;
     let showParentFolder = false;
     let showPreviousButton = false;
@@ -431,8 +436,8 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
               }
             }
 
-            this.levels.push(this.itemsGridData);
-            
+            this.levels.push(this.itemsGridData);            
+
             if (this.levels){
               showNextButton = this.levels[this.currentLevel].length > this.limitItemsPerLevel; 
               if (showNextButton) {
@@ -440,7 +445,8 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
               } else{
                 this.levelIndexTo = this.levels[this.currentLevel].length - 1;
               }
-              this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo );
+              this._pushLevelsIndexes(showPreviousButton, showParentFolder, showNextButton);
+              this._setPage(showPreviousButton, showParentFolder, showNextButton);
               if (this.breadcrumbList){
                 this.push ('breadcrumbList', {
                   level: 0,
@@ -457,11 +463,30 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
         
       }
     }
-
-    
   }
 
-  _setPage(_showPrevious, _showParent, _showNext, _from, _to) {
+  _pushLevelsIndexes(_showPrevious, _showParent, _showNext){
+    this.push('levelsIndexes', {
+      currentLevelPage: this.currentLevelPage,
+      levelIndexFrom: this.levelIndexFrom,
+      levelIndexTo: this.levelIndexTo, 
+      showPreviousButton: _showPrevious,
+      showParentFolder: _showParent,
+      showNextButton: _showNext
+
+    });
+  }
+
+  _setLevelsIndexes(_showPrevious, _showParent, _showNext){
+    this.levelsIndexes[this.currentLevel].currentLevelPage = this.currentLevelPage;
+    this.levelsIndexes[this.currentLevel].levelIndexFrom = this.levelIndexFrom;
+    this.levelsIndexes[this.currentLevel].levelIndexTo = this.levelIndexTo;
+    this.levelsIndexes[this.currentLevel].showPreviousButton = _showPrevious;
+    this.levelsIndexes[this.currentLevel].showParentFolder = _showParent;
+    this.levelsIndexes[this.currentLevel].showNextButton = _showNext;
+  }
+
+  _setPage(_showPrevious, _showParent, _showNext) {
     
     if (this.limitItemsPerLevel != 0 ) {
       this.set('level', this.levels[this.currentLevel].slice(this.levelIndexFrom, this.levelIndexTo + 1));
@@ -497,37 +522,32 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
     this.currentLevel--;
     this.currentLevelPage = 0;
     this.levelIndexFrom = 0;
-    // Remove the last element of an array:
-    this.levels.pop();
     let showNextButton = false;
     let showParentFolder = false;
     let showPreviousButton = false;
 
-    if (this.currentLevel > 0){
-      showParentFolder = true;
+    // Remove the last element of an array:
+    this.levels.pop();
+    this.levelsIndexes.pop();
+
+
+    if (this.levelsIndexes){
+      if (this.levelsIndexes[this.currentLevel]) {
+        this.currentLevelPage = this.levelsIndexes[this.currentLevel].currentLevelPage;
+        this.levelIndexFrom = this.levelsIndexes[this.currentLevel].levelIndexFrom;
+        this.levelIndexTo = this.levelsIndexes[this.currentLevel].levelIndexTo;
+        showPreviousButton = this.levelsIndexes[this.currentLevel].showPreviousButton;
+        showParentFolder = this.levelsIndexes[this.currentLevel].showParentFolder;
+        showNextButton = this.levelsIndexes[this.currentLevel].showNextButton;
+      }
     }
 
-    if (this.levels){
-      if (this.levels[this.currentLevel]){
-        showNextButton = this.levels[this.currentLevel].length -1 > this.limitItemsPerLevel; 
+    this._setPage(showPreviousButton, showParentFolder, showNextButton);
 
-        if (showNextButton){
-          this.levelIndexTo = this.levelIndexFrom + this.limitItemsPerLevel - 1 - 1;
-          if (this.currentLevel > 0) { 
-            this.levelIndexTo = this.levelIndexTo - 1;
-          }
-        } else {
-          this.levelIndexTo = this.levels[this.currentLevel].length - 1; 
-        }
-    
-        this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo );
-    
-        this.pop('breadcrumbList');
-    
-        if (this.autoFlow) {
-          this._autoFlow('parentFolderSelected');
-        }
-      }
+    this.pop('breadcrumbList');
+
+    if (this.autoFlow) {
+      this._autoFlow('parentFolderSelected');
     }
   }
 
@@ -538,7 +558,6 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
     let showParentFolder = false;
     let showPreviousButton = true;
 
-
     if (this.levels){
       if (this.levels[this.currentLevel]){
         if ( this.levels[this.currentLevel].length - this.levelIndexFrom <= this.limitItemsPerLevel - 1){ //-1 del previous //ulyima página 
@@ -547,8 +566,8 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
           this.levelIndexTo = this.levelIndexFrom + this.limitItemsPerLevel - 1 - 1 - 1; //-1 previous -1 next -1 0based
           showNextButton = true;
         }
-
-        this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo );
+        this._setLevelsIndexes(showPreviousButton, showParentFolder, showNextButton);
+        this._setPage(showPreviousButton, showParentFolder, showNextButton);
       }
     }
   }
@@ -575,7 +594,8 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
       this.levelIndexFrom = 0;
     }
 
-    this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo )
+    this._setLevelsIndexes(showPreviousButton, showParentFolder, showNextButton);
+    this._setPage(showPreviousButton, showParentFolder, showNextButton);
   }
 
   _selectFolder (item) {
@@ -614,7 +634,8 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
             this.levelIndexTo = this.levels[this.currentLevel].length - 1; 
           }
 
-          this._setPage(showPreviousButton, showParentFolder, showNextButton, this.levelIndexFrom, this.levelIndexTo);
+          this._pushLevelsIndexes(showPreviousButton, showParentFolder, showNextButton);
+          this._setPage(showPreviousButton, showParentFolder, showNextButton);
 
           if (this.breadcrumbList) {
             this.push('breadcrumbList', {
