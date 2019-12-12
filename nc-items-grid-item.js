@@ -140,6 +140,23 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           color: black;
         }
 
+        .item-content-kiosk-header-info{
+          position: absolute;
+          left: 0;
+          margin-left: 5px;
+          text-align: center;
+          width: fit-content;
+          vertical-align: middle;
+          padding: 2px;
+          z-index: 3;
+        }
+
+        .item-content-kiosk-header-info > iron-icon{
+          height: 36px;
+          width: 36px;
+          color: #FFCC80;
+        }
+
         .item-content-kiosk-header-used-qty{
           position: absolute;
           right: 0;
@@ -336,7 +353,10 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
               <template is="dom-if" if="[[animations]]">
                 <paper-ripple></paper-ripple>
               </template>
-              <div class="item-content-kiosk-header">
+              <div class="item-content-kiosk-header" on-click="_selectItemHeader">
+                <div class="item-content-kiosk-header-info">
+                  <iron-icon icon="info"></iron-icon>
+                </div>
                 <div class="item-content-kiosk-header-price">[[_formatPrice(itemData.price)]]</div>
                 <div class="item-content-kiosk-header-used-qty" hidden$="{{hideUsedQty}}">[[itemData.usedQty]]</div>
               </div>
@@ -531,6 +551,15 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         this.dispatchEvent(new CustomEvent('item-selected', {detail: this.itemData, bubbles: true, composed: true }));
         break;
     }
+  }
+
+  _selectItemHeader(e){
+    // prevent "selectItem" event of parent div
+    if (!e) var e = window.event;
+    e.cancelBubble = true;
+    if (e.stopPropagation) e.stopPropagation();
+    
+    this.dispatchEvent(new CustomEvent('item-kiosk-header-selected', {detail: this.itemData, bubbles: true, composed: true }));
   }
 
   _checkType(type, itemType){
