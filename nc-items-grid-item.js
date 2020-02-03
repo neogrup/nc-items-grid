@@ -71,10 +71,33 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           box-shadow: var(--item-content-box-shadow);
         }
 
+        .item-content-kiosk {
+          border-radius: 100px;
+          overflow: hidden;
+          position: relative;
+          width: var(--item-content-width);
+          height: 200px;
+          margin: var(--item-margin);
+          margin-top: 70px;
+          cursor: pointer;
+          border: 1px solid #c9c9c9;
+          box-shadow: var(--item-content-box-shadow);
+        }
+
         .next-button{
           border-color: transparent;
           background-color: transparent;
           box-shadow: none;
+          @apply --layout-horizontal;
+          @apply --layout-center-justified;
+          @apply --layout-center;
+        }
+
+        .next-button-kiosk{
+          background-color: #c9c9c9;
+          color: black;
+          font-size: var(--item-content-folder-font-size);
+          text-transform: uppercase;
           @apply --layout-horizontal;
           @apply --layout-center-justified;
           @apply --layout-center;
@@ -89,10 +112,31 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           @apply --layout-center;
         }
 
+        .previous-button-kiosk{
+          background-color: #c9c9c9;
+          color: black;
+          font-size: var(--item-content-folder-font-size);
+          text-transform: uppercase;
+          @apply --layout-horizontal;
+          @apply --layout-center-justified;
+          @apply --layout-center;
+        }
+
+
         .parent-folder{
           border-color: transparent;
           background-color: transparent;
           box-shadow: none;
+          @apply --layout-horizontal;
+          @apply --layout-center-justified;
+          @apply --layout-center;
+        }
+
+        .parent-folder-kiosk{
+          background-color: #c9c9c9;
+          color: black;
+          font-size: var(--item-content-folder-font-size);
+          text-transform: uppercase;
           @apply --layout-horizontal;
           @apply --layout-center-justified;
           @apply --layout-center;
@@ -308,20 +352,44 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
 
       <div class="item-container" on-click="_selectItem">
         <template is="dom-if" if="[[_checkType('parentFolder', itemData.type)]]">
-          <div class="item-content parent-folder" >
-            <paper-fab class="parent-folder-paper-fab" icon="chevron-left"></paper-fab>
+          <div class$="{{parentFolderClassName}}">
+            <template is="dom-if" if="[[animations]]">
+              <paper-ripple></paper-ripple>
+            </template>
+            <template is="dom-if" if="[[!_checkViewMode('kiosk')]]">
+              <paper-fab class="parent-folder-paper-fab" icon="chevron-left"></paper-fab>
+            </template>
+            <template is="dom-if" if="[[_checkViewMode('kiosk')]]">
+              <div>[[localize('ITEM_GRID_PARENT_FOLDER')]]</div>
+            </template>
           </div>
         </template>
 
         <template is="dom-if" if="[[_checkType('nextButton', itemData.type)]]">
-          <div class="item-content next-button">
-            <paper-fab class="next-paper-fab" icon="chevron-right"></paper-fab>
+          <div class$="{{nextButtonClassName}}">
+            <template is="dom-if" if="[[animations]]">
+              <paper-ripple></paper-ripple>
+            </template>
+            <template is="dom-if" if="[[!_checkViewMode('kiosk')]]">
+              <paper-fab class="next-paper-fab" icon="chevron-right"></paper-fab>
+            </template>
+            <template is="dom-if" if="[[_checkViewMode('kiosk')]]">
+            <div>[[localize('ITEM_GRID_NEXT_FOLDER')]]</div>
+            </template>
           </div>
         </template>
 
         <template is="dom-if" if="[[_checkType('previousButton', itemData.type)]]">
-          <div class="item-content previous-button">
-            <paper-fab class="previous-paper-fab" icon="chevron-left"></paper-fab>
+          <div class$="{{previousButtonClassName}}">
+            <template is="dom-if" if="[[animations]]">
+              <paper-ripple></paper-ripple>
+            </template>
+            <template is="dom-if" if="[[!_checkViewMode('kiosk')]]">
+              <paper-fab class="previous-paper-fab" icon="chevron-left"></paper-fab>
+            </template>
+            <template is="dom-if" if="[[_checkViewMode('kiosk')]]">
+            <div>[[localize('ITEM_GRID_PREVIOUS_FOLDER')]]</div>
+            </template>
           </div>
         </template>
 
@@ -426,7 +494,19 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
       hidePrice: {
         type: Boolean,
         value: false
-      }
+      },
+      parentFolderClassName: {
+        type: String,
+        value: 'item-content'
+      },
+      nextButtonClassName: {
+        type: String,
+        value: 'item-content'
+      },
+      previousButtonClassName: {
+        type: String,
+        value: 'item-content'
+      },
     }
   }
 
@@ -496,7 +576,11 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         break;
     }
 
-    if (this.itemViewMode === 'kiosk') {    
+    if (this.itemViewMode === 'kiosk') {  
+      this.parentFolderClassName = 'item-content-kiosk parent-folder-kiosk';
+      this.nextButtonClassName = 'item-content-kiosk next-button-kiosk';
+      this.previousButtonClassName = 'item-content-kiosk previous-button-kiosk';
+
       if (this.itemHeight > this.itemWidth){
         let diffHeight = this.itemHeight - this.itemWidth
 
@@ -510,6 +594,10 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           '--item-content-kiosk-footer-height': itemContentKioskFooterHeight + 'px'
         });
       }
+    } else {
+      this.parentFolderClassName = 'item-content parent-folder';
+      this.nextButtonClassName = 'item-content next-button';
+      this.previousButtonClassName = 'item-content previous-button';
     }
 
     this.updateStyles({
