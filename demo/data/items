@@ -30,22 +30,22 @@
     {
       "code": "TEST6",
       "name": "Test 6",
-      "backgroundColor": "#FFCC80"
+      "backgroundColor": "#004d40"
     },
     {
       "code": "TEST7",
       "name": "Test 7",
-      "backgroundColor": "#FFCC80"
+      "backgroundColor": "#80cbc4"
     },
     {
       "code": "TEST8",
       "name": "Test 8",
-      "backgroundColor": "#80CBC4"
+      "backgroundColor": "#e1bee7"
     },
     {
       "code": "TEST9",
       "name": "Test 9",
-      "backgroundColor": "#80CBC4"
+      "backgroundColor": "#4a148c"
     },
     {
       "code": "TEST10",
