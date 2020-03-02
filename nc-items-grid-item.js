@@ -18,6 +18,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         :host{
           --item-content-background-image: none;
           --item-content-background-color: transparent;
+          --item-content-color: black;
           --item-content-width: 100px;
           --item-content-height: 100px;
 
@@ -158,6 +159,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           border-color: var(--app-secondary-color, #253855);
           background-image: var(--item-content-background-image);
           background-color: var(--item-content-background-color);
+          color: var(--item-content-color);
           background-position: center;
           background-repeat: no-repeat;
           background-size: cover;
@@ -522,12 +524,14 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
 
   _itemDataChanged(){
     let itemContentBackgroundColor = 'transparent';
+    let itemContentColor = "black";
     let itemContentBackgroundImage = 'none';
     this.hideUsedQty = true;
 
 
     this.updateStyles({
       '--item-content-background-color':   itemContentBackgroundColor,
+      '--item-content-color':   itemContentColor,
       '--item-content-background-image': itemContentBackgroundImage,
       '--item-content-width': this.itemWidth + 'px',
       '--item-content-height': this.itemHeight + 'px',
@@ -600,8 +604,35 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
       this.previousButtonClassName = 'item-content previous-button';
     }
 
+    if (itemContentBackgroundColor != 'transparent'){
+      let hexcolor = itemContentBackgroundColor;
+
+      if (hexcolor.slice(0, 1) === '#') {
+        hexcolor = hexcolor.slice(1);
+      }
+    
+      // If a three-character hexcode, make six-character
+      if (hexcolor.length === 3) {
+        hexcolor = hexcolor.split('').map(function (hex) {
+          return hex + hex;
+        }).join('');
+      }
+    
+      // Convert to RGB value
+      var r = parseInt(hexcolor.substr(0,2),16);
+      var g = parseInt(hexcolor.substr(2,2),16);
+      var b = parseInt(hexcolor.substr(4,2),16);
+    
+      // Get YIQ ratio
+      var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    
+      // Check contrast
+      itemContentColor = (yiq >= 128) ? 'black' : 'white';
+    }
+
     this.updateStyles({
       '--item-content-background-color':   itemContentBackgroundColor,
+      '--item-content-color':   itemContentColor,
       '--item-content-background-image': itemContentBackgroundImage,
       '--item-content-width': this.itemWidth + 'px',
       '--item-content-height': this.itemHeight + 'px',
