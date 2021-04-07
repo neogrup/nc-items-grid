@@ -652,7 +652,8 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
     }
   }
 
-  _selectItem() {
+  _selectItem(e) {
+    this.itemData.target = e.target;
     switch (this.itemData.type) {
       case "parentFolder":
         this.dispatchEvent(new CustomEvent('parent-folder-selected', {bubbles: true, composed: true }));
