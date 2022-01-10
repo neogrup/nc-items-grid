@@ -36,6 +36,7 @@ Copyright (c) 2017 Neo
   <script type="module">
     import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
     import '@polymer/iron-ajax/iron-ajax.js';
+    import '@neogrup/nc-icons/nc-icons.js';
 
     class DemoNcItemsGrid extends PolymerElement {
       static get template() {
@@ -46,6 +47,8 @@ Copyright (c) 2017 Neo
             }
           </style>
 
+          <nc-icons></nc-icons>
+          
           <iron-ajax 
               id="getItemsList"
               auto
