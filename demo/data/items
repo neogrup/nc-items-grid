@@ -15,12 +15,14 @@
     {
       "code": "TEST3",
       "name": "Test 3",
-      "urlImage": "images/test3.png"
+      "urlImage": "images/test3.png",
+      "icon":"nc-icons:wallet"
     },
     {
       "code": "TEST4",
       "name": "Test 4",
-      "backgroundColor": "#FFCC80"
+      "backgroundColor": "#FFCC80",
+      "icon":"delete"
     },
     {
       "code": "TEST5",

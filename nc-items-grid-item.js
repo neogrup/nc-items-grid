@@ -22,7 +22,11 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           --item-content-width: 100px;
           --item-content-height: 100px;
 
+          --item-content-icon-width: 24px;
+          --item-content-icon-height: 24px;
+
           --item-content-border-radius: 5px;
+          --item-content-icon-content-border-radius: 15px;
           --item-content-box-shadow: none;
 
           --item-content-kiosk-header-height: 20px;
@@ -70,6 +74,40 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           cursor: pointer;
           border: 1px solid var(--app-secondary-color, #253855);
           box-shadow: var(--item-content-box-shadow);
+        }
+
+        .item-content-icon-content {
+          border-radius: var(--item-content-icon-content-border-radius);
+          overflow: hidden;
+          position: relative;
+          width: var(--item-content-width);
+          height: var(--item-content-height);
+          margin: var(--item-margin);
+          cursor: pointer;
+          border: 1px solid var(--app-secondary-color, #253855);
+          box-shadow: var(--item-content-box-shadow);
+          background-color: var(--item-content-background-color);
+          color: var(--item-content-color);
+          font-size: var(--item-content-default-font-size);
+          @apply --layout-vertical;
+          @apply --layout-center-justified;
+          @apply --layout-center;
+        }
+
+        .item-content-icon > iron-icon{
+          width: var(--item-content-icon-width);
+          height: var(--item-content-icon-height);
+          color: #424242;
+        }
+
+        .item-content-icon-name {
+          white-space: pre-line;
+          width: 100%;
+          text-align: center;
+          overflow: hidden;
+          padding: 5px 0;
+          z-index: 1;
+          
         }
 
         .item-content-kiosk {
@@ -406,16 +444,35 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
 
         <template is="dom-if" if="[[_checkType('default', itemData.type)]]">
           <template is="dom-if" if="[[_checkViewMode('default')]]">
-            <div class="item-content default">
-              <template is="dom-if" if="[[animations]]">
-                <paper-ripple></paper-ripple>
-              </template>
-              <div class="item-content-header">
-                <div class="item-content-header-used-qty" hidden$="{{hideUsedQty}}">[[itemData.usedQty]]</div>
-                <div class="item-content-header-price" hidden$="{{hidePrice}}">[[itemData.price]]</div>
+
+            <template is="dom-if" if="[[hideItemIcon]]">
+              <div class="item-content default">
+                <template is="dom-if" if="[[animations]]">
+                  <paper-ripple></paper-ripple>
+                </template>
+                <div class="item-content-header">
+                  <div class="item-content-header-used-qty" hidden$="{{hideUsedQty}}">[[itemData.usedQty]]</div>
+                  <div class="item-content-header-price" hidden$="{{hidePrice}}">[[itemData.price]]</div>
+                </div>
+                <div hidden\$="[[hideItemIcon]]">
+                  <iron-icon icon="[[itemIcon]]"></iron-icon>
+                </div>
+                <div class\$="{{itemContentNameClassName}}" hidden\$="[[hideItemName]]">[[itemData.name]]</div>
               </div>
-              <div class\$="{{itemContentNameClassName}}" hidden\$="[[hideItemName]]">[[itemData.name]]</div>
-            </div>
+            </template>
+
+            <template is="dom-if" if="[[!hideItemIcon]]">
+              <div class="item-content-icon-content">
+                <template is="dom-if" if="[[animations]]">
+                  <paper-ripple></paper-ripple>
+                </template>
+                <div class="item-content-icon">
+                  <iron-icon icon="[[itemIcon]]"></iron-icon>
+                </div>
+                <div class="item-content-icon-name">[[itemData.name]]</div>
+              </div>
+            </template>
+
           </template>
 
           <template is="dom-if" if="[[_checkViewMode('kiosk')]]">
@@ -454,6 +511,11 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         type: Boolean,
         value: false
       },
+      hideItemIcon:{
+        type: Boolean,
+        value: true
+      },
+      itemIcon: String,
       itemWidth:{
         type: Number
       },
@@ -527,16 +589,37 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
     let itemContentColor = "black";
     let itemContentBackgroundImage = 'none';
     this.hideUsedQty = true;
+    this.hideItemIcon = true;
+
+    let itemContentIconContentBorderRadius = '5'
+    let itemContentIconWidth = '24';
+    let itemContentIconWiHeight = '24';
+
+    
 
 
     this.updateStyles({
-      '--item-content-background-color':   itemContentBackgroundColor,
-      '--item-content-color':   itemContentColor,
+      '--item-content-background-color': itemContentBackgroundColor,
+      '--item-content-color': itemContentColor,
       '--item-content-background-image': itemContentBackgroundImage,
       '--item-content-width': this.itemWidth + 'px',
       '--item-content-height': this.itemHeight + 'px',
+      '--item-content-icon-content-border-radius': itemContentIconContentBorderRadius + 'px',
+      '--item-content-icon-width': itemContentIconWidth + 'px',
+      '--item-content-icon-height': itemContentIconWiHeight + 'px',
       '--item-margin': this.itemMargin + 'px'
     });
+
+    if (this.itemData.icon){
+      this.hideItemIcon = false;
+      this.itemIcon = this.itemData.icon;
+      itemContentIconContentBorderRadius = '10';
+      if (this.itemWidth != '70') {
+        itemContentIconWidth = '48';
+        itemContentIconWiHeight = '48';
+        itemContentIconContentBorderRadius = '15';
+      }
+    } 
 
     switch (this.itemData.type) {
       case "folder":
@@ -636,6 +719,9 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
       '--item-content-background-image': itemContentBackgroundImage,
       '--item-content-width': this.itemWidth + 'px',
       '--item-content-height': this.itemHeight + 'px',
+      '--item-content-icon-content-border-radius': itemContentIconContentBorderRadius + 'px',
+      '--item-content-icon-width': itemContentIconWidth + 'px',
+      '--item-content-icon-height': itemContentIconWiHeight + 'px',
       '--item-margin': this.itemMargin + 'px'
     });
     
