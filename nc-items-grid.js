@@ -96,12 +96,13 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
 
         .loading{
           position: absolute;
-          width: 100%;
-          height: 100%;
+          width: calc(100% + 5px);
+          height: calc(100% + 5px);
           opacity: 0.6;
           background-color: #EEEEEE;
           z-index: 99999999;
-          
+          left: -5px;
+          top: -5px;
         }
         
         paper-spinner{
@@ -138,6 +139,11 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
         </ul>
       </template>
       <div class="container">
+      <div id="loading" class="loading" hidden$="[[!loading]]">
+        <div class="spinnerLoading">
+          <paper-spinner active></paper-spinner>
+        </div>
+      </div>
         <div class$="{{itemsContainerClassName}}">
           <template is="dom-repeat" items="[[level]]" mutable-data>
           
