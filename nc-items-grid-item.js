@@ -41,7 +41,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           --item-content-default-used-qty-font-size: 1.1em;
         }
 
-        :host([item-selected]) > div.item-container > div.default {
+        :host([item-selected]) > div.item-container > div.default, :host([item-selected]) > div.item-container > div.item-content-icon-content {
           /* filter: brightness(90%); */
           /* filter: drop-shadow(1px 1px  var(--app-secondary-color, #253855)); */
           /* box-shadow: 0 6px 10px 0 rgba(0, 0, 0, 0.14),
@@ -49,7 +49,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
                       0 3px 5px -1px rgba(0, 0, 0, 0.4); */
           background-color: var(--app-accent-color, #FF9800);
           border-color: black;
-          box-shadow:inset 0px 0px 0px 2px var(--app-accent-color, #FF9800);
+          box-shadow: inset 0px 0px 0px 2px var(--app-accent-color, #FF9800);
           font-weight: bolder;
         }
 
@@ -107,7 +107,6 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           overflow: hidden;
           padding: 5px 0;
           z-index: 1;
-          
         }
 
         .item-content-kiosk {
@@ -525,6 +524,10 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
       itemMargin:{
         type: Number
       },
+      itemBorderRadiusVariable:{
+        type: Boolean,
+        value: false
+      },
       itemViewMode: {
         type: String,
         value: 'default'
@@ -595,9 +598,6 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
     let itemContentIconWidth = '24';
     let itemContentIconWiHeight = '24';
 
-    
-
-
     this.updateStyles({
       '--item-content-background-color': itemContentBackgroundColor,
       '--item-content-color': itemContentColor,
@@ -613,11 +613,15 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
     if (this.itemData.icon){
       this.hideItemIcon = false;
       this.itemIcon = this.itemData.icon;
-      itemContentIconContentBorderRadius = '10';
+      if (this.itemBorderRadiusVariable){
+        itemContentIconContentBorderRadius = '10';
+      }
       if (this.itemWidth != '70') {
         itemContentIconWidth = '48';
         itemContentIconWiHeight = '48';
-        itemContentIconContentBorderRadius = '15';
+        if (this.itemBorderRadiusVariable){
+          itemContentIconContentBorderRadius = '15';
+        }
       }
     } 
 

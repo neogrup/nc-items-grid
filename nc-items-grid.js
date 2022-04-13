@@ -154,6 +154,7 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
                 item-width="[[itemWidth]]" 
                 item-height="[[itemHeight]]" 
                 item-margin="[[itemMargin]]" 
+                item-border-radius-variable="[[itemBorderRadiusVariable]]"
                 item-view-mode="[[itemViewMode]]" 
                 hide-item-name="[[hideItemName]]" 
                 hide-item-price="[[hideItemPrice]]"
@@ -201,6 +202,10 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
         type: Number,
         value: 2,
         reflectToAttribute: true
+      },
+      itemBorderRadiusVariable:{
+        type: Boolean,
+        value: false
       },
       itemViewMode:{
         type: String,
