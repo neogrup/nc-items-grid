@@ -452,7 +452,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
                 </template>
                 <div class="item-content-header">
                   <div class="item-content-header-used-qty" hidden$="{{hideUsedQty}}">[[itemData.usedQty]]</div>
-                  <div class="item-content-header-price" hidden$="{{hidePrice}}">[[itemData.price]]</div>
+                  <div class="item-content-header-price" hidden$="{{hideItemPrice}}">[[itemData.price]]</div>
                 </div>
                 <div hidden\$="[[hideItemIcon]]">
                   <iron-icon icon="[[itemIcon]]"></iron-icon>
@@ -555,7 +555,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         type: Boolean,
         value: true
       },
-      hidePrice: {
+      hideItemPrice: {
         type: Boolean,
         value: false
       },

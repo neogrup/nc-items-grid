@@ -156,10 +156,10 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
                 item-margin="[[itemMargin]]" 
                 item-view-mode="[[itemViewMode]]" 
                 hide-item-name="[[hideItemName]]" 
+                hide-item-price="[[hideItemPrice]]"
                 on-item-selected="_itemSelected"
                 keep-item-selected="[[keepItemSelected]]" 
                 item-selected-id="[[itemSelectedId]]" 
-                hide-price ="[[hideItemsPrice]]"
                 animations ="[[animations]]"
                 on-parent-folder-selected="_parentFolderSelected" 
                 on-next-button-pressed="_nextButtonPressed" 
@@ -317,7 +317,7 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
         type: String,
         notify: true
       },
-      hidePrice: {
+      hideItemPrice: {
         type: Boolean,
         value: false
       },
