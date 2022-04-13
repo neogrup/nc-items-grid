@@ -10,7 +10,7 @@
     "url": "https://github.com/NEOGRUP/nc-items-grid"
   },
   "name": "@neogrup/nc-items-grid",
-  "version": "2.1.7",
+  "version": "2.1.8",
   "resolutions": {
     "inherits": "2.0.3",
     "samsam": "1.1.3",
