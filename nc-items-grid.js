@@ -489,16 +489,24 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
   }
 
   _setLevelsIndexes(_showPrevious, _showParent, _showNext){
-    this.levelsIndexes[this.currentLevel].currentLevelPage = this.currentLevelPage;
-    this.levelsIndexes[this.currentLevel].levelIndexFrom = this.levelIndexFrom;
-    this.levelsIndexes[this.currentLevel].levelIndexTo = this.levelIndexTo;
-    this.levelsIndexes[this.currentLevel].showPreviousButton = _showPrevious;
-    this.levelsIndexes[this.currentLevel].showParentFolder = _showParent;
-    this.levelsIndexes[this.currentLevel].showNextButton = _showNext;
+    if (typeof this.levelsIndexes[this.currentLevel] !== "undefined") {
+      if (this.levelsIndexes[this.currentLevel]) {
+        this.levelsIndexes[this.currentLevel].currentLevelPage = this.currentLevelPage;
+        this.levelsIndexes[this.currentLevel].levelIndexFrom = this.levelIndexFrom;
+        this.levelsIndexes[this.currentLevel].levelIndexTo = this.levelIndexTo;
+        this.levelsIndexes[this.currentLevel].showPreviousButton = _showPrevious;
+        this.levelsIndexes[this.currentLevel].showParentFolder = _showParent;
+        this.levelsIndexes[this.currentLevel].showNextButton = _showNext;
+      }
+    }
   }
 
   _setPage(_showPrevious, _showParent, _showNext) {
     
+    if (typeof this.levels[this.currentLevel] === "undefined") {
+      return;
+    }
+
     if (this.limitItemsPerLevel != 0 ) {
       this.set('level', this.levels[this.currentLevel].slice(this.levelIndexFrom, this.levelIndexTo + 1));
 
