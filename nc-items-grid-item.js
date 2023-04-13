@@ -114,7 +114,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           overflow: hidden;
           position: relative;
           width: var(--item-content-width);
-          height: 200px;
+          height: var(--item-content-height);
           margin: var(--item-margin);
           cursor: pointer;
           border: 1px solid #c9c9c9;
@@ -135,6 +135,8 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           color: black;
           font-size: var(--item-content-folder-font-size);
           text-transform: uppercase;
+          height: calc(var(--item-content-height) - 40px);
+          margin-top: calc(var(--item-margin) + 20px);
           @apply --layout-horizontal;
           @apply --layout-center-justified;
           @apply --layout-center;
@@ -154,6 +156,8 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           color: black;
           font-size: var(--item-content-folder-font-size);
           text-transform: uppercase;
+          height: calc(var(--item-content-height) - 40px);
+          margin-top: calc(var(--item-margin) + 20px);
           @apply --layout-horizontal;
           @apply --layout-center-justified;
           @apply --layout-center;
@@ -174,6 +178,8 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           color: black;
           font-size: var(--item-content-folder-font-size);
           text-transform: uppercase;
+          height: calc(var(--item-content-height) - 40px);
+          margin-top: calc(var(--item-margin) + 20px);
           @apply --layout-horizontal;
           @apply --layout-center-justified;
           @apply --layout-center;
