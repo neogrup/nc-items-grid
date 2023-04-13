@@ -116,7 +116,6 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           width: var(--item-content-width);
           height: 200px;
           margin: var(--item-margin);
-          margin-top: 70px;
           cursor: pointer;
           border: 1px solid #c9c9c9;
           box-shadow: var(--item-content-box-shadow);
