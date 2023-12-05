@@ -488,7 +488,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
                 <div class="item-content-kiosk-header-info">
                   <iron-icon icon="info"></iron-icon>
                 </div>
-                <div class="item-content-kiosk-header-price">[[_formatPrice(itemData.price)]]</div>
+                <div class="item-content-kiosk-header-price">[[_formatPriceCur(itemData.price, symbol)]]</div>
                 <div class="item-content-kiosk-header-used-qty" hidden$="{{hideUsedQty}}">[[itemData.usedQty]]</div>
               </div>
               <div class="item-content-kiosk-image default"></div>
@@ -511,6 +511,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         value: true
       },
       language: String,
+      symbol: String,
       hideItemName:{
         type: Boolean,
         value: false
@@ -786,11 +787,11 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
     return (viewMode == this.itemViewMode);
   }
 
-  _formatPrice(price) {
-    let priceText = ""
-    if (price){
-      priceText = formatMoney(price, {symbol: "€", precision: 2, thousand: ".", decimal: ",", format: "%v %s"});
-    }
+  _formatPriceCur(price, symbol) {
+    let priceText = "";
+    let lPrice = (price) ? price : 0;
+    if (symbol == '') symbol = '€';
+    priceText = formatMoney(lPrice, {symbol: symbol, precision: 2, thousand: ".", decimal: ",", format: "%v %s"});
     return priceText;
   }
 

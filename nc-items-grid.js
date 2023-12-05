@@ -149,6 +149,7 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
           
             <nc-items-grid-item 
                 id="slot[[item.code]]" 
+                symbol="{{symbol}}"
                 language="{{language}}" 
                 item-data="[[item]]" 
                 item-width="[[itemWidth]]" 
@@ -188,6 +189,7 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
         value: false
       },
       language: String,
+      symbol: String,
       itemWidth:{
         type: Number,
         value: 100,
