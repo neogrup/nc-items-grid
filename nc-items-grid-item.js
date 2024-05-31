@@ -349,8 +349,42 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           font-weight: bolder;
           z-index: 3;
         }
-        
+
         .item-content-header-used-qty:empty{
+          background: transparent;
+        }
+
+        .item-content-header-available-qty{
+          position: absolute;
+          left:0;
+          right:0;
+          margin-right:auto;
+          text-align: center;
+          min-width: 15px;
+          width: fit-content;
+          vertical-align: middle;
+          padding: 2px;
+          border-radius: 25%;
+          border: 2px solid white;
+          background: var(--app-accent-color, #FF0000);
+          font-size: var(--item-content-default-used-qty-font-size);
+          font-weight: bolder;
+          z-index: 3;
+        }
+
+        .stockwarning {
+          background: var(--app-accent-color, #EEFF00);
+        }
+        
+        .stocknone {
+          background: var(--app-accent-color, #FFFFFF);
+        }
+
+        .stockunavailable {
+          background: var(--app-accent-color, #FF0000);
+        }
+
+        .item-content-header-available-qty:empty{
           background: transparent;
         }
 
@@ -455,6 +489,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
                   <paper-ripple></paper-ripple>
                 </template>
                 <div class="item-content-header">
+                  <div class$="item-content-header-available-qty stock[[itemData.availableStatus]]" hidden$="{{hideAvailableQty}}">[[itemData.availableQty]]</div>
                   <div class="item-content-header-used-qty" hidden$="{{hideUsedQty}}">[[itemData.usedQty]]</div>
                   <div class="item-content-header-price" hidden$="{{hideItemPrice}}">[[itemData.price]]</div>
                 </div>
@@ -488,6 +523,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
                 <div class="item-content-kiosk-header-info">
                   <iron-icon icon="info"></iron-icon>
                 </div>
+                <div class="item-content-header-available-qty" hidden$="{{hideAvailableQty}}">[[itemData.availableQty]]</div>
                 <div class="item-content-kiosk-header-price">[[_formatPriceCur(itemData.price, symbol)]]</div>
                 <div class="item-content-kiosk-header-used-qty" hidden$="{{hideUsedQty}}">[[itemData.usedQty]]</div>
               </div>
@@ -564,6 +600,10 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         type: Boolean,
         value: true
       },
+      hideAvailableQty: {
+        type: Boolean,
+        value: true
+      },
       hideItemPrice: {
         type: Boolean,
         value: false
@@ -598,6 +638,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
     let itemContentColor = "black";
     let itemContentBackgroundImage = 'none';
     this.hideUsedQty = true;
+    this.hideAvailableQty = true;
     this.hideItemIcon = true;
 
     let itemContentIconContentBorderRadius = '5'
@@ -745,6 +786,10 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
 
     if (this.itemData.usedQty > 0){
       this.hideUsedQty = false;
+    }
+
+    if (typeof this.itemData.availableQty !== 'undefined'){
+      this.hideAvailableQty = false;
     }
   }
 

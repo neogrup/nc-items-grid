@@ -10,13 +10,18 @@
     {
       "code": "TEST2",
       "name": "Test 2",
-      "urlImage": "images/test2.png"
+      "urlImage": "images/test2.png",
+      "usedQty": 2,
+      "availableQty": 3,
+      "availableStatus": "warning"
     },
     {
       "code": "TEST3",
       "name": "Test 3",
       "urlImage": "images/test3.png",
-      "icon":"nc-icons:wallet"
+      "_icon":"nc-icons:wallet",
+      "availableQty": 6,
+      "availableStatus": "none"
     },
     {
       "code": "TEST4",
@@ -27,7 +32,9 @@
     {
       "code": "TEST5",
       "name": "Test 5 largo para salto",
-      "backgroundColor": "#FFCC80"
+      "backgroundColor": "#FFCC80",
+      "availableQty": 0,
+      "availableStatus": "unavailable"
     },
     {
       "code": "TEST6",
