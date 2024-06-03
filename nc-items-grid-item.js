@@ -373,19 +373,19 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         }
 
         .stockerror {
-          background: var(--app-accent-color, #FF0000);
+          background: #FF0000;
         }
 
         .stockwarning {
-          background: var(--app-accent-color, #EEFF00);
+          background: #EEFF00;
         }
         
         .stocknone {
-          background: var(--app-accent-color, #FFFFFF);
+          background: #FFFFFF;
         }
 
         .stockunavailable {
-          background: var(--app-accent-color, #FF0000);
+          background: #FF0000;
         }
 
         .item-content-header-available-qty:empty{
