@@ -365,11 +365,12 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           vertical-align: middle;
           padding: 2px;
           border-radius: 25%;
-          border: 2px solid white;
+          border: 1px solid black;
           background: var(--app-accent-color, #FF0000);
           font-size: var(--item-content-default-used-qty-font-size);
           font-weight: bolder;
           z-index: 3;
+          margin: 2px;
         }
 
         .stockerror {
