@@ -386,7 +386,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         }
 
         .stockunavailable {
-          background: #FF0000;
+          background: #FF00DB;
         }
 
         .item-content-header-available-qty:empty{
