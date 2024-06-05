@@ -39,6 +39,22 @@
     {
       "code": "TEST6",
       "name": "Test 6",
+      "type": "folder",
+      "content": [
+        {
+          "code": "TEST1-6",
+          "name": "Test 1 - 6",
+          "urlImage": "images/test1.png"
+        },
+        {
+          "code": "TEST2-6",
+          "name": "Test 2 - 6",
+          "urlImage": "images/test2.png",
+          "usedQty": 2,
+          "availableQty": 3,
+          "availableStatus": "warning"
+        }
+      ],
       "backgroundColor": "#004d40"
     },
     {

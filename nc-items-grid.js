@@ -686,6 +686,14 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
     this._itemsGridDataChanged();
   }
 
+  refreshLevel() {
+    let showPreviousButton = this.levelsIndexes[this.currentLevel].showPreviousButton;
+    let showParentFolder = this.levelsIndexes[this.currentLevel].showParentFolder;
+    let showNextButton = this.levelsIndexes[this.currentLevel].showNextButton;
+
+    this._setPage(showPreviousButton, showParentFolder, showNextButton);
+  }
+
   _appResize(){
     if ((typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1)){
       if (!this.keyboardShowed){
