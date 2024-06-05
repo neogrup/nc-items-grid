@@ -687,6 +687,9 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
   }
 
   refreshLevel() {
+    if (this.levelsIndexes.length == 0) return;
+    if (this.currentLevel < 0) return;
+
     let showPreviousButton = this.levelsIndexes[this.currentLevel].showPreviousButton;
     let showParentFolder = this.levelsIndexes[this.currentLevel].showParentFolder;
     let showNextButton = this.levelsIndexes[this.currentLevel].showNextButton;
