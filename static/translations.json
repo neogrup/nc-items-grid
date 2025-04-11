@@ -22,5 +22,11 @@
     "ITEM_GRID_NEXT_FOLDER": "Plus...",
     "ITEM_GRID_PARENT_FOLDER": "Retourner",
     "ITEM_GRID_PREVIOUS_FOLDER": "Retourner..."
+  },
+  "eu-es":{
+    "ITEMS_GRID_BREADCRUMB_ALL": "Guztiak",
+    "ITEM_GRID_NEXT_FOLDER": "Gehiago...",
+    "ITEM_GRID_PARENT_FOLDER": "Atzera...",
+    "ITEM_GRID_PREVIOUS_FOLDER": "Atzera..."
   }
 }
