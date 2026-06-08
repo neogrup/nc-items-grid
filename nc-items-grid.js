@@ -439,6 +439,7 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
         this._resizeDebouncer = Debouncer.debounce(this._resizeDebouncer,
           timeOut.after(this.debounceTime),
           () => {
+            if (!this.itemsGridData || this.itemsGridData.length === 0) return;
             this.gridResize();
             // Remove folder without elements (starting from the end)
             for (let i = this.itemsGridData.length - 1; i >= 0; i--){ 
