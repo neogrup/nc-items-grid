@@ -4,12 +4,12 @@
   "data": [
     {
       "code": "TEST1",
-      "name": "Test 1",
+      "name": "Bocata jamón york",
       "urlImage": "images/test1.png"
     },
     {
       "code": "TEST2",
-      "name": "Test 2",
+      "name": "Bocata jamón serrano",
       "urlImage": "images/test2.png",
       "usedQty": 2,
       "availableQty": 3,
@@ -17,7 +17,7 @@
     },
     {
       "code": "TEST3",
-      "name": "Test 3",
+      "name": "Lomo embuchado",
       "urlImage": "images/test3.png",
       "_icon":"nc-icons:wallet",
       "availableQty": 6,
@@ -25,13 +25,13 @@
     },
     {
       "code": "TEST4",
-      "name": "Test 4",
+      "name": "Bocata refresco EPL",
       "backgroundColor": "#FFCC80",
       "icon":"delete"
     },
     {
       "code": "TEST5",
-      "name": "Test 5 largo para salto",
+      "name": "Bocata chorizo EPL",
       "backgroundColor": "#FFCC80",
       "availableQty": 0,
       "availableStatus": "unavailable"

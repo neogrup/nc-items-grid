@@ -157,6 +157,7 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
                 item-margin="[[itemMargin]]" 
                 item-border-radius-variable="[[itemBorderRadiusVariable]]"
                 item-view-mode="[[itemViewMode]]" 
+                item-text-lines="[[itemTextLines]]"
                 hide-item-name="[[hideItemName]]" 
                 hide-item-price="[[hideItemPrice]]"
                 on-item-selected="_itemSelected"
@@ -212,7 +213,14 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
       itemViewMode:{
         type: String,
         value: 'default',
-        reflectToAttribute: true
+        reflectToAttribute: true,
+        observer: '_itemViewModeChanged'
+      },
+      itemTextLines: {
+        type: String,
+        value: 'growing',
+        reflectToAttribute: true,
+        observer: '_itemTextLinesChanged'
       },
       hideItemName: Boolean,
       levels: {
@@ -356,6 +364,24 @@ class NcItemsGrid extends mixinBehaviors([AppLocalizeBehavior], MutableData(Poly
   _appVisibilityChange(e){
     if (document.visibilityState == 'visible') {
       this._appResize();
+    }
+  }
+
+  _itemViewModeChanged(){
+    if (this.shadowRoot) {
+      let items = this.shadowRoot.querySelectorAll('nc-items-grid-item');
+      items.forEach(item => {
+        item.itemViewMode = this.itemViewMode;
+      });
+    }
+  }
+
+  _itemTextLinesChanged(){
+    if (this.shadowRoot) {
+      let items = this.shadowRoot.querySelectorAll('nc-items-grid-item');
+      items.forEach(item => {
+        item.itemTextLines = this.itemTextLines;
+      });
     }
   }
 

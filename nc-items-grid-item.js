@@ -105,8 +105,40 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           width: 100%;
           text-align: center;
           overflow: hidden;
-          padding: 5px 0;
+          padding: 5px 4px;
           z-index: 1;
+          box-sizing: border-box;
+          line-height: 1.2;
+          word-break: break-word;
+        }
+
+        :host([item-text-lines="fixed"]) .item-content-icon-name,
+        :host([item-text-lines="fixedcentered"]) .item-content-icon-name {
+          height: calc(2.4em + 10px);
+          max-height: calc(2.4em + 10px);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        :host([item-text-lines="fixed"]) .item-content-icon-name {
+          justify-content: flex-start;
+        }
+
+        :host([item-text-lines="fixedcentered"]) .item-content-icon-name {
+          justify-content: center;
+        }
+
+        :host([item-text-lines="fixed"]) .item-content-icon-name .item-content-text,
+        :host([item-text-lines="fixedcentered"]) .item-content-icon-name .item-content-text {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 100%;
+          max-height: 2.4em;
+          text-align: center;
         }
 
         .item-content-kiosk {
@@ -209,23 +241,33 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         }
 
 
+        .item-content.kiosk{
+          display: flex;
+          flex-direction: column;
+        }
+
         .item-content-kiosk-header{
-          height: var(--item-content-kiosk-header-height);
+          height: auto;
+          min-height: 24px;
+          flex-shrink: 0;
+          position: relative;
           background: #FFA726;
           @apply --layout-horizontal;
           @apply --layout-center-justified;
           @apply --layout-center;
-          padding: 0 10px;
+          padding: 4px 10px;
+          box-sizing: border-box;
         }
 
         .item-content-kiosk-header-price{
           /* @apply --layout-flex; */
           /* text-align: right; */
-          font-size: 1.5em;
+          font-size: 1.4em;
           font-weight: bolder;
           overflow: hidden;
           color: white;
           color: black;
+          line-height: 1.2;
         }
 
         .item-content-kiosk-header-info{
@@ -237,11 +279,13 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           vertical-align: middle;
           padding: 2px;
           z-index: 3;
+          display: flex;
+          align-items: center;
         }
 
         .item-content-kiosk-header-info > iron-icon{
-          height: 36px;
-          width: 36px;
+          height: 24px;
+          width: 24px;
           color: #FFCC80;
         }
 
@@ -257,7 +301,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           border-radius: 25%;
           border: 2px solid black;
           background: white;
-          font-size: 1.5em;
+          font-size: 1.2em;
           font-weight: bolder;
           z-index: 3;
         }
@@ -267,24 +311,54 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
         }
 
         .item-content-kiosk-image{
-          height: var(--item-content-kiosk-image-height);
+          flex: 1 1 auto;
+          min-height: 0;
+          width: 100%;
         }
 
         .item-content-kiosk-footer{
-          height: var(--item-content-kiosk-footer-height);
+          height: auto;
+          min-height: 24px;
+          flex-shrink: 0;
           background-color: #FFA726;
           @apply --layout-horizontal;
           @apply --layout-center-justified;
           @apply --layout-center;
           text-align: center;
-          padding: 0 10px;
+          padding: 4px 6px;
+          box-sizing: border-box;
         }
 
         .item-content-kiosk-footer-name{
-          font-size: 1.3em;
-          color: white;
+          font-size: 1.1em;
           color: black;
           overflow: hidden;
+          line-height: 1.15;
+          word-break: break-word;
+        }
+
+        :host([item-text-lines="fixed"]) .item-content-kiosk-footer,
+        :host([item-text-lines="fixedcentered"]) .item-content-kiosk-footer{
+          height: calc(2 * 1.15 * 1.1em + 8px);
+        }
+
+        :host([item-text-lines="fixed"]) .item-content-kiosk-footer{
+          align-items: flex-start;
+        }
+
+        :host([item-text-lines="fixedcentered"]) .item-content-kiosk-footer{
+          align-items: center;
+        }
+
+        :host([item-text-lines="fixed"]) .item-content-kiosk-footer-name,
+        :host([item-text-lines="fixedcentered"]) .item-content-kiosk-footer-name{
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-height: calc(2 * 1.15 * 1.1em);
+          width: 100%;
         }
 
         :host([item-selected]) > div.item-container > div.default > div.item-content-name {
@@ -305,8 +379,40 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           /* background: #253855D9; */
           color: white;
           overflow: hidden;
-          padding: 5px 0;
+          padding: 5px 4px;
           z-index: 1;
+          box-sizing: border-box;
+          line-height: 1.2;
+          word-break: break-word;
+        }
+
+        :host([item-text-lines="fixed"]) .item-content-name,
+        :host([item-text-lines="fixedcentered"]) .item-content-name {
+          height: calc(2.4em + 10px);
+          max-height: calc(2.4em + 10px);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        :host([item-text-lines="fixed"]) .item-content-name {
+          justify-content: flex-start;
+        }
+
+        :host([item-text-lines="fixedcentered"]) .item-content-name {
+          justify-content: center;
+        }
+
+        :host([item-text-lines="fixed"]) .item-content-name .item-content-text,
+        :host([item-text-lines="fixedcentered"]) .item-content-name .item-content-text {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 100%;
+          max-height: 2.4em;
+          text-align: center;
         }
 
         :host([item-selected]) > div.item-container > div.default > div.item-content-name-center {
@@ -322,8 +428,40 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
           top: 50%;
           transform: translate(0,-50%);
           overflow: hidden;
-          padding: 5px 0;
+          padding: 5px 4px;
           z-index: 1;
+          box-sizing: border-box;
+          line-height: 1.2;
+          word-break: break-word;
+        }
+
+        :host([item-text-lines="fixed"]) .item-content-name-center,
+        :host([item-text-lines="fixedcentered"]) .item-content-name-center {
+          height: calc(2.4em + 10px);
+          max-height: calc(2.4em + 10px);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        :host([item-text-lines="fixed"]) .item-content-name-center {
+          justify-content: flex-start;
+        }
+
+        :host([item-text-lines="fixedcentered"]) .item-content-name-center {
+          justify-content: center;
+        }
+
+        :host([item-text-lines="fixed"]) .item-content-name-center .item-content-text,
+        :host([item-text-lines="fixedcentered"]) .item-content-name-center .item-content-text {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 100%;
+          max-height: 2.4em;
+          text-align: center;
         }
         
 
@@ -439,10 +577,10 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
             <template is="dom-if" if="[[animations]]">
               <paper-ripple></paper-ripple>
             </template>
-            <template is="dom-if" if="[[!_checkViewMode('kiosk')]]">
+            <template is="dom-if" if="[[!_checkViewMode('kiosk', itemViewMode)]]">
               <paper-fab class="parent-folder-paper-fab" icon="chevron-left"></paper-fab>
             </template>
-            <template is="dom-if" if="[[_checkViewMode('kiosk')]]">
+            <template is="dom-if" if="[[_checkViewMode('kiosk', itemViewMode)]]">
               <div>[[localize('ITEM_GRID_PARENT_FOLDER')]]</div>
             </template>
           </div>
@@ -453,10 +591,10 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
             <template is="dom-if" if="[[animations]]">
               <paper-ripple></paper-ripple>
             </template>
-            <template is="dom-if" if="[[!_checkViewMode('kiosk')]]">
+            <template is="dom-if" if="[[!_checkViewMode('kiosk', itemViewMode)]]">
               <paper-fab class="next-paper-fab" icon="chevron-right"></paper-fab>
             </template>
-            <template is="dom-if" if="[[_checkViewMode('kiosk')]]">
+            <template is="dom-if" if="[[_checkViewMode('kiosk', itemViewMode)]]">
             <div>[[localize('ITEM_GRID_NEXT_FOLDER')]]</div>
             </template>
           </div>
@@ -467,10 +605,10 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
             <template is="dom-if" if="[[animations]]">
               <paper-ripple></paper-ripple>
             </template>
-            <template is="dom-if" if="[[!_checkViewMode('kiosk')]]">
+            <template is="dom-if" if="[[!_checkViewMode('kiosk', itemViewMode)]]">
               <paper-fab class="previous-paper-fab" icon="chevron-left"></paper-fab>
             </template>
-            <template is="dom-if" if="[[_checkViewMode('kiosk')]]">
+            <template is="dom-if" if="[[_checkViewMode('kiosk', itemViewMode)]]">
             <div>[[localize('ITEM_GRID_PREVIOUS_FOLDER')]]</div>
             </template>
           </div>
@@ -481,12 +619,12 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
             <template is="dom-if" if="[[animations]]">
               <paper-ripple></paper-ripple>
             </template>
-            <div class\$="{{itemContentNameClassName}}">[[itemData.name]]</div>
+            <div class\$="{{itemContentNameClassName}}"><span class="item-content-text">[[itemData.name]]</span></div>
           </div>
         </template>
 
         <template is="dom-if" if="[[_checkType('default', itemData.type)]]">
-          <template is="dom-if" if="[[_checkViewMode('default')]]">
+          <template is="dom-if" if="[[_checkViewMode('default', itemViewMode)]]">
 
             <template is="dom-if" if="[[hideItemIcon]]">
               <div class="item-content default">
@@ -501,7 +639,7 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
                 <div hidden\$="[[hideItemIcon]]">
                   <iron-icon icon="[[itemIcon]]"></iron-icon>
                 </div>
-                <div class\$="{{itemContentNameClassName}}" hidden\$="[[hideItemName]]">[[itemData.name]]</div>
+                <div class\$="{{itemContentNameClassName}}" hidden\$="[[hideItemName]]"><span class="item-content-text">[[itemData.name]]</span></div>
               </div>
             </template>
 
@@ -513,14 +651,14 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
                 <div class="item-content-icon">
                   <iron-icon icon="[[itemIcon]]"></iron-icon>
                 </div>
-                <div class="item-content-icon-name">[[itemData.name]]</div>
+                <div class="item-content-icon-name"><span class="item-content-text">[[itemData.name]]</span></div>
               </div>
             </template>
 
           </template>
 
-          <template is="dom-if" if="[[_checkViewMode('kiosk')]]">
-            <div class="item-content">
+          <template is="dom-if" if="[[_checkViewMode('kiosk', itemViewMode)]]">
+            <div class="item-content kiosk">
               <template is="dom-if" if="[[animations]]">
                 <paper-ripple></paper-ripple>
               </template>
@@ -563,10 +701,12 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
       },
       itemIcon: String,
       itemWidth:{
-        type: Number
+        type: Number,
+        observer: '_dimensionsChanged'
       },
       itemHeight:{
-        type: Number
+        type: Number,
+        observer: '_dimensionsChanged'
       },
       itemMargin:{
         type: Number
@@ -577,7 +717,13 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
       },
       itemViewMode: {
         type: String,
-        value: 'default'
+        value: 'default',
+        observer: '_itemViewModeChanged'
+      },
+      itemTextLines: {
+        type: String,
+        value: 'growing',
+        reflectToAttribute: true
       },
       itemData: {
         type: Object,
@@ -636,6 +782,21 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
     super.connectedCallback();
     this.useKeyIfMissing = true;
     this.loadResources(this.resolveUrl('./static/translations.json'));
+  }
+
+  _itemViewModeChanged(){
+    if (this.itemData) {
+      this._itemDataChanged();
+    }
+  }
+
+  _dimensionsChanged(){
+    if (this.itemWidth && this.itemHeight) {
+      this.updateStyles({
+        '--item-content-width': this.itemWidth + 'px',
+        '--item-content-height': this.itemHeight + 'px',
+      });
+    }
   }
 
   _itemDataChanged(){
@@ -723,20 +884,6 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
       this.parentFolderClassName = 'item-content-kiosk parent-folder-kiosk';
       this.nextButtonClassName = 'item-content-kiosk next-button-kiosk';
       this.previousButtonClassName = 'item-content-kiosk previous-button-kiosk';
-
-      if (this.itemHeight > this.itemWidth){
-        let diffHeight = this.itemHeight - this.itemWidth
-
-        let itemContentKioskHeaderHeight =  diffHeight * 0.5; 
-        let itemContentKioskImageHeight = this.itemWidth;
-        let itemContentKioskFooterHeight = diffHeight * 0.5;
-
-        this.updateStyles({
-          '--item-content-kiosk-header-height': itemContentKioskHeaderHeight + 'px',
-          '--item-content-kiosk-image-height': itemContentKioskImageHeight + 'px',
-          '--item-content-kiosk-footer-height': itemContentKioskFooterHeight + 'px'
-        });
-      }
     } else {
       this.parentFolderClassName = 'item-content parent-folder';
       this.nextButtonClassName = 'item-content next-button';
@@ -833,8 +980,9 @@ class NcItemsGridItem extends mixinBehaviors([AppLocalizeBehavior], MutableData(
     return (type == itemType);
   }
 
-  _checkViewMode(viewMode){
-    return (viewMode == this.itemViewMode);
+  _checkViewMode(viewMode, currentViewMode){
+    let mode = (typeof currentViewMode !== 'undefined') ? currentViewMode : this.itemViewMode;
+    return (viewMode == mode);
   }
 
   _formatPriceCur(price, symbol) {

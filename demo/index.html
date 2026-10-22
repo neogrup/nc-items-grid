@@ -58,6 +58,11 @@ Copyright (c) 2017 Neo
               last-response="{{itemsList}}">
           </iron-ajax>
 
+          <div style="margin-bottom: 12px; display: flex; gap: 10px; align-items: center;">
+            <button on-click="_toggleLines" style="padding: 6px 12px; cursor: pointer; font-size: 14px;">Toggle itemTextLines: <strong>[[itemTextLines]]</strong></button>
+            <button on-click="_toggleViewMode" style="padding: 6px 12px; cursor: pointer; font-size: 14px;">Toggle itemViewMode: <strong>[[itemViewMode]]</strong></button>
+          </div>
+
           <div class="container">
             <nc-items-grid
                 id="gridItems"
@@ -69,6 +74,8 @@ Copyright (c) 2017 Neo
                 breadcrumb
                 first-item-selected
                 keep-item-selected
+                item-view-mode="[[itemViewMode]]"
+                item-text-lines="[[itemTextLines]]"
                 on-item-selected="_itemSelected">
             </nc-items-grid>
           </div>
@@ -88,8 +95,31 @@ Copyright (c) 2017 Neo
           dimensionGridButtons: {
             type: Number,
             value: 100
+          },
+          itemViewMode: {
+            type: String,
+            value: 'default'
+          },
+          itemTextLines: {
+            type: String,
+            value: 'growing'
           }
         }
+      }
+
+      _toggleLines(){
+        if (this.itemTextLines === 'growing') {
+          this.itemTextLines = 'fixed';
+        } else if (this.itemTextLines === 'fixed') {
+          this.itemTextLines = 'fixedcentered';
+        } else {
+          this.itemTextLines = 'growing';
+        }
+      }
+
+      _toggleViewMode(){
+        this.itemViewMode = (this.itemViewMode === 'default') ? 'kiosk' : 'default';
+        this.dimensionGridButtons = (this.itemViewMode === 'kiosk') ? 160 : 100;
       }
 
       _itemSelected(item){
